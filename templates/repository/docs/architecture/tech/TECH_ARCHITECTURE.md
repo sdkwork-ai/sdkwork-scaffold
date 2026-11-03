@@ -49,7 +49,8 @@ Rules:
 - Flat and borderless: no card borders, no shadows, no gradients.
 - Separation comes from canvas/surface/tonal layers, not strokes.
 - One accent family; status uses the shared success/warn/error/skipped tokens.
-- PC uses an 88px navy rail; H5, Flutter, and native shells use a compact top bar.
+- PC uses an 88px navy rail.
+- H5, Flutter, iOS, Android, HarmonyOS, and the mini program use a fixed bottom tab bar with `Overview / Surfaces / Components`.
 - Flutter mirrors the same tokens in `lib/theme/app_theme.dart`; native shells keep the same color constants in their component registry.
 
 ## 3. System Boundaries And Modules

@@ -24,7 +24,7 @@ __APP_ROOT_REL__/
   oh-package.json5
 ```
 
-`entry/` stays thin: ability, root page, and composition only. Business pages belong in ArkTS packages under `packages/sdkwork-__APP_CODE__-harmony-mobile-<capability>/`.
+`entry/` stays thin: ability, root page, and composition only. The root uses ArkUI `Tabs` with `BarPosition.End` and `Overview / Surfaces / Components`. Business pages belong in ArkTS packages under `packages/sdkwork-__APP_CODE__-harmony-mobile-<capability>/`.
 
 ## Commands
 

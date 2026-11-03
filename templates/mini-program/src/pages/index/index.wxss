@@ -1,6 +1,6 @@
 .page {
   min-height: 100vh;
-  padding: 16px 16px 36px;
+  padding: 16px 16px calc(82px + env(safe-area-inset-bottom));
   box-sizing: border-box;
   background: #f2f5fa;
 }
@@ -108,7 +108,8 @@
 }
 
 .status-row,
-.component-row {
+.component-row,
+.surface-row {
   display: flex;
   align-items: flex-start;
   gap: 10px;
@@ -119,9 +120,70 @@
 }
 
 .status-copy,
-.component-copy {
+.component-copy,
+.surface-copy {
   flex: 1;
   min-width: 0;
+}
+
+.surface-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 30px;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: #0a5cff;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.surface-kind {
+  flex: 0 0 auto;
+  color: #5a6b85;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.tabbar {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 20;
+  display: flex;
+  min-height: 64px;
+  padding-bottom: env(safe-area-inset-bottom);
+  background: #ffffff;
+}
+
+.tab-item {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: #5a6b85;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.tab-item.active {
+  color: #0a5cff;
+  font-weight: 700;
+}
+
+.tab-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.tab-label {
+  font-size: 10px;
 }
 
 .row-title {

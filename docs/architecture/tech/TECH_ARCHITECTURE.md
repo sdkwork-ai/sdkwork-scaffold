@@ -55,12 +55,13 @@ Resolution records availability, package name, path, API surface, credential mod
 Generated clients use the `sdkwork-doctor` tech-blue system: `#f2f5fa` canvas, `#ffffff` surfaces, `#e6edf8` tonal rows, `#061a3a` chrome, `#0a5cff` accent, 14/10px radii, zero borders/shadows/gradients.
 
 - PC: 88px navy icon rail, white panels, tonal stats and component cards.
-- H5/Pad: compact chrome, responsive single/two/three-column panels.
-- Flutter: `lib/theme/app_theme.dart` carries the same tokens into Material 3.
-- iOS: SwiftUI light palette with the same surfaces and status chips.
-- Android: Compose `lightColorScheme` with zero elevation.
-- HarmonyOS: ArkUI light canvas with white cards and tonal rows.
-- Mini program: white cards, tonal rows, blue accent, no shadow.
+- Pad: rail or compact chrome depending on width; responsive panel columns.
+- H5: fixed bottom tab bar with `Overview / Surfaces / Components`, safe-area inset, no rail.
+- Flutter: `NavigationBar` bottom tabs; `lib/theme/app_theme.dart` carries the tokens into Material 3.
+- iOS: `TabView` bottom tabs with SwiftUI light palette and status chips.
+- Android: Material 3 `NavigationBar` bottom tabs, zero elevation.
+- HarmonyOS: ArkUI `Tabs` with `BarPosition.End`, light canvas, white cards.
+- Mini program: custom fixed bottom tab bar, white cards, tonal rows, blue accent.
 
 The generated app icon uses the same tech-blue mark.
 

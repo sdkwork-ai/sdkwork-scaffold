@@ -58,6 +58,26 @@ ThemeData buildAppTheme() {
         borderRadius: BorderRadius.all(Radius.circular(14)),
       ),
     ),
+    navigationBarTheme: NavigationBarThemeData(
+      backgroundColor: kSurface,
+      elevation: 0,
+      height: 70,
+      indicatorColor: kTechBlueSoft,
+      labelTextStyle: WidgetStateProperty.resolveWith(
+        (Set<WidgetState> states) => TextStyle(
+          fontSize: 12,
+          fontWeight: states.contains(WidgetState.selected)
+              ? FontWeight.w700
+              : FontWeight.w500,
+          color: states.contains(WidgetState.selected) ? kTechBlueStrong : kMuted,
+        ),
+      ),
+      iconTheme: WidgetStateProperty.resolveWith(
+        (Set<WidgetState> states) => IconThemeData(
+          color: states.contains(WidgetState.selected) ? kTechBlueStrong : kMuted,
+        ),
+      ),
+    ),
     dividerTheme: const DividerThemeData(color: kSurfaceAlt, thickness: 1),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(

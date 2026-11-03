@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'composition/architecture_registry.dart';
 import 'composition/component_registry.dart';
 import 'theme/app_theme.dart';
 
@@ -21,12 +22,24 @@ class SdkworkApp extends StatelessWidget {
   }
 }
 
-class FoundationHomePage extends StatelessWidget {
+class FoundationHomePage extends StatefulWidget {
   const FoundationHomePage({super.key});
 
   @override
+  State<FoundationHomePage> createState() => _FoundationHomePageState();
+}
+
+class _FoundationHomePageState extends State<FoundationHomePage> {
+  static const List<String> _titles = <String>[
+    'Overview',
+    'Surfaces',
+    'Components',
+  ];
+
+  int _index = 0;
+
+  @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
     final int linked = integratedComponents
         .where((IntegratedComponent component) => component.supported)
         .length;
@@ -34,173 +47,241 @@ class FoundationHomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(appName),
+        title: Text(_titles[_index]),
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: Center(
               child: Text(
                 'Flutter',
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: kTechBlueStrong,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      color: kTechBlueStrong,
+                      fontWeight: FontWeight.w600,
+                    ),
               ),
             ),
           ),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 20, 16, 36),
+      body: IndexedStack(
+        index: _index,
         children: <Widget>[
-          Text(
-            'SDKWORK APPLICATION FOUNDATION',
-            style: theme.textTheme.labelSmall?.copyWith(
-              color: kTechBlue,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 1.5,
-            ),
+          _overviewTab(context, linked, planned),
+          _surfacesTab(context),
+          _componentsTab(context, linked, planned),
+        ],
+      ),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _index,
+        onDestinationSelected: (int index) => setState(() => _index = index),
+        destinations: const <NavigationDestination>[
+          NavigationDestination(
+            icon: Icon(Icons.dashboard_outlined),
+            selectedIcon: Icon(Icons.dashboard),
+            label: 'Overview',
           ),
-          const SizedBox(height: 8),
-          Text(
-            appName,
-            style: theme.textTheme.headlineSmall?.copyWith(
-              color: kInk,
-              fontWeight: FontWeight.w700,
-              letterSpacing: -0.6,
-            ),
+          NavigationDestination(
+            icon: Icon(Icons.layers_outlined),
+            selectedIcon: Icon(Icons.layers),
+            label: 'Surfaces',
           ),
-          const SizedBox(height: 8),
-          Text(
-            appDescription,
-            style: theme.textTheme.bodyMedium?.copyWith(color: kMuted),
+          NavigationDestination(
+            icon: Icon(Icons.widgets_outlined),
+            selectedIcon: Icon(Icons.widgets),
+            label: 'Components',
           ),
-          const SizedBox(height: 20),
-          Row(
-            children: <Widget>[
-              _StatTile(label: 'Components', value: '${integratedComponents.length}'),
-              const SizedBox(width: 10),
-              _StatTile(label: 'Linked', value: '$linked'),
-              const SizedBox(width: 10),
-              _StatTile(label: 'Plan', value: '$planned'),
-            ],
+        ],
+      ),
+    );
+  }
+
+  Widget _overviewTab(BuildContext context, int linked, int planned) {
+    final ThemeData theme = Theme.of(context);
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(16, 20, 16, 32),
+      children: <Widget>[
+        Text(
+          'SDKWORK APPLICATION FOUNDATION',
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: kTechBlue,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 1.5,
           ),
-          const SizedBox(height: 16),
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(18),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'Foundation status',
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: kInk,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'The initial delivery boundary is visible and explicit.',
-                    style: theme.textTheme.bodySmall?.copyWith(color: kMuted),
-                  ),
-                  const SizedBox(height: 14),
-                  const _StatusRow(
-                    title: 'Repository baseline',
-                    subtitle: 'Canon, identity, workspace metadata, and root layout',
-                    status: 'Ready',
-                  ),
-                  const _StatusRow(
-                    title: 'Architecture surface',
-                    subtitle: 'Flutter root with composition and component registry',
-                    status: 'Ready',
-                  ),
-                  const _StatusRow(
-                    title: 'First vertical workflow',
-                    subtitle: 'Requirements, API contracts, and package modules',
-                    status: 'Next',
-                  ),
-                ],
-              ),
-            ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          appName,
+          style: theme.textTheme.headlineSmall?.copyWith(
+            color: kInk,
+            fontWeight: FontWeight.w700,
+            letterSpacing: -0.6,
           ),
-          const SizedBox(height: 16),
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(18),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'Integrated components',
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: kInk,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '$linked linked · $planned planned',
-                    style: theme.textTheme.bodySmall?.copyWith(color: kMuted),
-                  ),
-                  const SizedBox(height: 12),
-                  if (integratedComponents.isEmpty)
-                    Text(
-                      'No common component is enabled for this application.',
-                      style: theme.textTheme.bodySmall?.copyWith(color: kMuted),
-                    )
-                  else
-                    ...integratedComponents.map(
-                      (IntegratedComponent component) => _ComponentRow(component: component),
-                    ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          Container(
+        ),
+        const SizedBox(height: 8),
+        Text(
+          appDescription,
+          style: theme.textTheme.bodyMedium?.copyWith(color: kMuted),
+        ),
+        const SizedBox(height: 20),
+        Row(
+          children: <Widget>[
+            _StatTile(label: 'Architectures', value: '${architectureRoots.length}'),
+            const SizedBox(width: 10),
+            _StatTile(label: 'Linked', value: '$linked'),
+            const SizedBox(width: 10),
+            _StatTile(label: 'Plan', value: '$planned'),
+          ],
+        ),
+        const SizedBox(height: 16),
+        Card(
+          child: Padding(
             padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(
-              color: kTechBlueSoft,
-              borderRadius: BorderRadius.circular(14),
-            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'Recommended next move',
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: kTechBlue,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 1.2,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'Write the requirement before the screen.',
+                  'Foundation status',
                   style: theme.textTheme.titleMedium?.copyWith(
                     color: kInk,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 4),
                 Text(
-                  'Capture the first workflow in docs/product/prd/PRD.md, record the boundary decision, then add API, SDK, and package work.',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: kMuted,
-                    height: 1.55,
-                  ),
+                  'The initial delivery boundary is visible and explicit.',
+                  style: theme.textTheme.bodySmall?.copyWith(color: kMuted),
+                ),
+                const SizedBox(height: 14),
+                const _StatusRow(
+                  title: 'Repository baseline',
+                  subtitle: 'Canon, identity, workspace metadata, and root layout',
+                  status: 'Ready',
+                ),
+                const _StatusRow(
+                  title: 'Architecture surface',
+                  subtitle: 'Flutter root with composition and component registry',
+                  status: 'Ready',
+                ),
+                const _StatusRow(
+                  title: 'First vertical workflow',
+                  subtitle: 'Requirements, API contracts, and package modules',
+                  status: 'Next',
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 20),
-          Text(
-            appCode,
-            style: theme.textTheme.labelSmall?.copyWith(color: kMuted),
+        ),
+      ],
+    );
+  }
+
+  Widget _surfacesTab(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(16, 20, 16, 32),
+      children: <Widget>[
+        Text(
+          'SDKWORK APPLICATION FOUNDATION',
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: kTechBlue,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 1.5,
           ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Application surfaces',
+          style: theme.textTheme.headlineSmall?.copyWith(
+            color: kInk,
+            fontWeight: FontWeight.w700,
+            letterSpacing: -0.6,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Each architecture keeps its own root, manifest, and toolchain.',
+          style: theme.textTheme.bodyMedium?.copyWith(color: kMuted),
+        ),
+        const SizedBox(height: 16),
+        ...architectureRoots.map(
+          (ArchitectureRoot root) => _SurfaceRow(root: root),
+        ),
+      ],
+    );
+  }
+
+  Widget _componentsTab(BuildContext context, int linked, int planned) {
+    final ThemeData theme = Theme.of(context);
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(16, 20, 16, 32),
+      children: <Widget>[
+        Text(
+          'SDKWORK APPLICATION FOUNDATION',
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: kTechBlue,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 1.5,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Component composition',
+          style: theme.textTheme.headlineSmall?.copyWith(
+            color: kInk,
+            fontWeight: FontWeight.w700,
+            letterSpacing: -0.6,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          '$linked linked · $planned planned · resolved from sibling SDK manifests.',
+          style: theme.textTheme.bodyMedium?.copyWith(color: kMuted),
+        ),
+        const SizedBox(height: 16),
+        if (integratedComponents.isEmpty)
+          Text(
+            'No common component is enabled for this application.',
+            style: theme.textTheme.bodySmall?.copyWith(color: kMuted),
+          )
+        else
+          ...integratedComponents.map(
+            (IntegratedComponent component) => _ComponentRow(component: component),
+          ),
+        const SizedBox(height: 12),
+        Container(
+          padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            color: kTechBlueSoft,
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Recommended next move',
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: kTechBlue,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1.2,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Write the requirement before the screen.',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: kInk,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Capture the first workflow in docs/product/prd/PRD.md, record the boundary decision, then add API, SDK, and package work.',
+                style: theme.textTheme.bodySmall?.copyWith(color: kMuted, height: 1.55),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -300,6 +381,71 @@ class _StatusRow extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SurfaceRow extends StatelessWidget {
+  const _SurfaceRow({required this.root});
+
+  final ArchitectureRoot root;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: kSurfaceAlt,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        children: <Widget>[
+          Container(
+            width: 30,
+            height: 30,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: kTechBlue,
+              borderRadius: BorderRadius.circular(9),
+            ),
+            child: Text(
+              root.id.substring(0, 2).toUpperCase(),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 10,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  root.title,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: kInk,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  root.root,
+                  style: theme.textTheme.bodySmall?.copyWith(color: kMuted),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            root.kind,
+            style: theme.textTheme.labelSmall?.copyWith(color: kMuted),
           ),
         ],
       ),

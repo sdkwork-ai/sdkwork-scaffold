@@ -14,7 +14,10 @@ __APP_ROOT_REL__/
   lib/
     main.dart
     app.dart
+    theme/
+      app_theme.dart
     composition/
+      architecture_registry.dart
       component_registry.dart
   test/
   config/components/
@@ -22,7 +25,7 @@ __APP_ROOT_REL__/
   pubspec.yaml
 ```
 
-`lib/` stays thin: app entry, root shell, component registry, and bootstrap wiring. Feature screens belong in `packages/__DART_PACKAGE_NAME__-<capability>/`.
+`lib/` stays thin: app entry, root shell, component registry, and bootstrap wiring. The shell uses a Material 3 bottom `NavigationBar` with `Overview / Surfaces / Components`. Feature screens belong in `packages/__DART_PACKAGE_NAME__-<capability>/`.
 
 ## Commands
 

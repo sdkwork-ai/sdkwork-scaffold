@@ -217,8 +217,10 @@ All generated clients use the tech-blue, flat, borderless visual system of
 | Radius | `14px` / `10px` | Panels / controls |
 
 Rules: no card borders, no shadows, no gradients. Separation comes from
-canvas/surface/tonal layers. PC uses an 88px navy icon rail; H5 and native
-surfaces use a compact top bar. Flutter carries the same tokens in
+canvas/surface/tonal layers. PC uses an 88px navy icon rail. H5, Flutter,
+iOS, Android, HarmonyOS, and the mini program use a fixed bottom tab bar with
+`Overview / Surfaces / Components`; mobile content switches in place and
+respects the safe-area inset. Flutter carries the same tokens in
 `lib/theme/app_theme.dart`; iOS, Android, HarmonyOS, and the mini program keep
 the same palette in their generated shells.
 

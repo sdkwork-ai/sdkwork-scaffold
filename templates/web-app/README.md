@@ -28,6 +28,8 @@ __APP_ROOT_REL__/
 
 `src/composition/components.ts` is the generated component registry. `src/composition/sdkClients.ts` constructs the selected TypeScript app SDK clients with one shared base URL and token manager. Per-component settings live in `config/components/<id>.json`.
 
+PC uses the persistent left rail. H5 uses a fixed bottom tab bar with `Overview / Surfaces / Components`; the tab panels are switched in place and respect the safe-area inset.
+
 ## Commands
 
 ```bash

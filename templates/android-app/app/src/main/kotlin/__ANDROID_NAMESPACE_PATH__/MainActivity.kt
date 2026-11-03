@@ -7,28 +7,43 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Dashboard
+import androidx.compose.material.icons.outlined.Layers
+import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import __ANDROID_NAMESPACE__.bootstrap.ArchitectureRegistry
+import __ANDROID_NAMESPACE__.bootstrap.ArchitectureRoot
 import __ANDROID_NAMESPACE__.bootstrap.ComponentRegistry
 import __ANDROID_NAMESPACE__.bootstrap.IntegratedComponent
 
@@ -67,7 +82,7 @@ class MainActivity : ComponentActivity() {
                 ),
             ) {
                 Surface(modifier = Modifier.fillMaxSize(), color = Canvas) {
-                    FoundationScreen(ComponentRegistry.components)
+                    SdkworkAppShell()
                 }
             }
         }
@@ -75,83 +90,144 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun FoundationScreen(components: List<IntegratedComponent>) {
-    val linked = components.count { it.supported }
-    val planned = components.size - linked
+private fun SdkworkAppShell() {
+    var selectedTab by rememberSaveable { mutableIntStateOf(0) }
+    val tabs = listOf(
+        Triple("Overview", Icons.Outlined.Dashboard, 0),
+        Triple("Surfaces", Icons.Outlined.Layers, 1),
+        Triple("Components", Icons.Outlined.Widgets, 2),
+    )
 
+    Scaffold(
+        containerColor = Canvas,
+        bottomBar = {
+            NavigationBar(containerColor = SurfaceWhite, tonalElevation = 0.dp) {
+                tabs.forEach { (label, icon, index) ->
+                    NavigationBarItem(
+                        selected = selectedTab == index,
+                        onClick = { selectedTab = index },
+                        icon = { Icon(icon, contentDescription = label) },
+                        label = { Text(label) },
+                    )
+                }
+            }
+        },
+    ) { padding ->
+        when (selectedTab) {
+            0 -> OverviewScreen(ComponentRegistry.components, ArchitectureRegistry.roots, Modifier.padding(padding))
+            1 -> SurfacesScreen(ArchitectureRegistry.roots, Modifier.padding(padding))
+            else -> ComponentsScreen(ComponentRegistry.components, Modifier.padding(padding))
+        }
+    }
+}
+
+@Composable
+private fun OverviewScreen(
+    components: List<IntegratedComponent>,
+    roots: List<ArchitectureRoot>,
+    modifier: Modifier = Modifier,
+) {
+    val linked = components.count { it.supported }
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp),
+        contentPadding = PaddingValues(vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         item {
-            Spacer(Modifier.height(20.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = "__APP_NAME__",
-                    color = Ink,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.SemiBold,
-                )
-                Text(
-                    text = "Android",
-                    color = TechBlueStrong,
-                    style = MaterialTheme.typography.labelSmall,
-                    fontWeight = FontWeight.SemiBold,
-                )
-            }
-            Spacer(Modifier.height(4.dp))
-            Text(
-                text = "SDKWORK APPLICATION FOUNDATION",
-                color = TechBlue,
-                style = MaterialTheme.typography.labelSmall,
-                fontWeight = FontWeight.Bold,
-            )
-            Spacer(Modifier.height(6.dp))
-            Text(
-                text = "__APP_DESCRIPTION__",
-                color = Muted,
-                style = MaterialTheme.typography.bodySmall,
-            )
+            PageHeader("Overview", "__APP_NAME__", "__APP_DESCRIPTION__")
             Spacer(Modifier.height(16.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                StatTile("Components", components.size.toString(), Modifier.weight(1f))
+                StatTile("Architectures", roots.size.toString(), Modifier.weight(1f))
                 StatTile("Linked", linked.toString(), Modifier.weight(1f))
-                StatTile("Plan", planned.toString(), Modifier.weight(1f))
+                StatTile("Plan", (components.size - linked).toString(), Modifier.weight(1f))
             }
-            Spacer(Modifier.height(4.dp))
         }
-
         item {
-            Panel(title = "Foundation status", subtitle = "The initial delivery boundary is visible and explicit.") {
+            Panel("Foundation status", "The initial delivery boundary is visible and explicit.") {
                 StatusRow("Repository baseline", "Canon, identity, workspace metadata, and root layout", "Ready", true)
-                StatusRow("Architecture surface", "Kotlin/Compose root with component registry", "Ready", true)
+                StatusRow("Architecture surface", "Kotlin/Compose root with bottom navigation", "Ready", true)
                 StatusRow("First vertical workflow", "Requirements, API contracts, and package modules", "Next", false)
             }
         }
+    }
+}
 
+@Composable
+private fun SurfacesScreen(roots: List<ArchitectureRoot>, modifier: Modifier = Modifier) {
+    LazyColumn(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        contentPadding = PaddingValues(vertical = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
         item {
-            Panel(title = "Integrated components", subtitle = "$linked linked · $planned planned") {
-                if (components.isEmpty()) {
+            PageHeader("Surfaces", "Application surfaces", "Each architecture keeps its own root, manifest, and toolchain.")
+            Spacer(Modifier.height(8.dp))
+        }
+        items(roots.size) { index ->
+            val root = roots[index]
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(SurfaceAlt, RoundedCornerShape(10.dp))
+                    .padding(12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(30.dp)
+                        .background(TechBlue, RoundedCornerShape(9.dp)),
+                    contentAlignment = Alignment.Center,
+                ) {
                     Text(
-                        text = "No common component is enabled for this application.",
-                        color = Muted,
-                        style = MaterialTheme.typography.bodySmall,
+                        text = root.id.take(2).uppercase(),
+                        color = Color.White,
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.Bold,
                     )
-                } else {
-                    components.forEach { component ->
-                        ComponentRow(component)
-                        Spacer(Modifier.height(8.dp))
-                    }
                 }
+                Spacer(Modifier.width(10.dp))
+                Column(Modifier.weight(1f)) {
+                    Text(root.title, color = Ink, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+                    Text(root.root, color = Muted, style = MaterialTheme.typography.bodySmall)
+                }
+                Spacer(Modifier.width(8.dp))
+                Text(root.kind, color = Muted, style = MaterialTheme.typography.labelSmall)
             }
         }
+    }
+}
 
+@Composable
+private fun ComponentsScreen(components: List<IntegratedComponent>, modifier: Modifier = Modifier) {
+    val linked = components.count { it.supported }
+    LazyColumn(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        contentPadding = PaddingValues(vertical = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        item {
+            PageHeader(
+                "Components",
+                "Component composition",
+                "$linked linked · ${components.size - linked} planned · resolved from sibling SDK manifests.",
+            )
+            Spacer(Modifier.height(8.dp))
+        }
+        if (components.isEmpty()) {
+            item {
+                Text("No common component is enabled for this application.", color = Muted, style = MaterialTheme.typography.bodySmall)
+            }
+        } else {
+            items(components.size) { index ->
+                ComponentRow(components[index])
+            }
+        }
         item {
             Column(
                 modifier = Modifier
@@ -159,38 +235,32 @@ private fun FoundationScreen(components: List<IntegratedComponent>) {
                     .background(TechBlueSoft, RoundedCornerShape(14.dp))
                     .padding(18.dp),
             ) {
-                Text(
-                    text = "RECOMMENDED NEXT MOVE",
-                    color = TechBlue,
-                    style = MaterialTheme.typography.labelSmall,
-                    fontWeight = FontWeight.Bold,
-                )
+                Text("RECOMMENDED NEXT MOVE", color = TechBlue, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
+                Spacer(Modifier.height(6.dp))
+                Text("Write the requirement before the screen.", color = Ink, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                 Spacer(Modifier.height(6.dp))
                 Text(
-                    text = "Write the requirement before the screen.",
-                    color = Ink,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
-                )
-                Spacer(Modifier.height(6.dp))
-                Text(
-                    text = "Capture the first workflow in docs/product/prd/PRD.md, record the boundary decision, then add API, SDK, and package work.",
+                    "Capture the first workflow in docs/product/prd/PRD.md, record the boundary decision, then add API, SDK, and package work.",
                     color = Muted,
                     style = MaterialTheme.typography.bodySmall,
                 )
             }
         }
-
-        item {
-            Spacer(Modifier.height(8.dp))
-            Text(
-                text = "sdkwork-__APP_CODE__ · Android",
-                color = Muted,
-                style = MaterialTheme.typography.labelSmall,
-            )
-            Spacer(Modifier.height(28.dp))
-        }
     }
+}
+
+@Composable
+private fun PageHeader(eyebrow: String, title: String, subtitle: String) {
+    Text(
+        text = eyebrow.uppercase(),
+        color = TechBlue,
+        style = MaterialTheme.typography.labelSmall,
+        fontWeight = FontWeight.Bold,
+    )
+    Spacer(Modifier.height(6.dp))
+    Text(title, color = Ink, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+    Spacer(Modifier.height(4.dp))
+    Text(subtitle, color = Muted, style = MaterialTheme.typography.bodySmall)
 }
 
 @Composable
@@ -200,28 +270,14 @@ private fun StatTile(label: String, value: String, modifier: Modifier = Modifier
             .background(SurfaceAlt, RoundedCornerShape(10.dp))
             .padding(12.dp),
     ) {
-        Text(
-            text = label.uppercase(),
-            color = Muted,
-            style = MaterialTheme.typography.labelSmall,
-            fontWeight = FontWeight.SemiBold,
-        )
+        Text(label.uppercase(), color = Muted, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold)
         Spacer(Modifier.height(4.dp))
-        Text(
-            text = value,
-            color = Ink,
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-        )
+        Text(value, color = Ink, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
     }
 }
 
 @Composable
-private fun Panel(
-    title: String,
-    subtitle: String,
-    content: @Composable () -> Unit,
-) {
+private fun Panel(title: String, subtitle: String, content: @Composable () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = SurfaceWhite),
@@ -229,14 +285,9 @@ private fun Panel(
         shape = RoundedCornerShape(14.dp),
     ) {
         Column(Modifier.padding(18.dp)) {
-            Text(
-                text = title,
-                color = Ink,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-            )
+            Text(title, color = Ink, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
             Spacer(Modifier.height(4.dp))
-            Text(text = subtitle, color = Muted, style = MaterialTheme.typography.bodySmall)
+            Text(subtitle, color = Muted, style = MaterialTheme.typography.bodySmall)
             Spacer(Modifier.height(12.dp))
             content()
         }
@@ -254,13 +305,8 @@ private fun StatusRow(title: String, subtitle: String, status: String, ready: Bo
         verticalAlignment = Alignment.Top,
     ) {
         Column(Modifier.weight(1f)) {
-            Text(
-                text = title,
-                color = Ink,
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold,
-            )
-            Text(text = subtitle, color = Muted, style = MaterialTheme.typography.bodySmall)
+            Text(title, color = Ink, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+            Text(subtitle, color = Muted, style = MaterialTheme.typography.bodySmall)
         }
         Spacer(Modifier.width(8.dp))
         Box(
@@ -269,7 +315,7 @@ private fun StatusRow(title: String, subtitle: String, status: String, ready: Bo
                 .padding(horizontal = 9.dp, vertical = 3.dp),
         ) {
             Text(
-                text = status,
+                status,
                 color = if (ready) Success else Warning,
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.SemiBold,
@@ -289,8 +335,7 @@ private fun ComponentRow(component: IntegratedComponent) {
     ) {
         Box(
             modifier = Modifier
-                .width(32.dp)
-                .height(32.dp)
+                .size(32.dp)
                 .background(TechBlue, RoundedCornerShape(9.dp)),
             contentAlignment = Alignment.Center,
         ) {
@@ -303,18 +348,9 @@ private fun ComponentRow(component: IntegratedComponent) {
         }
         Spacer(Modifier.width(10.dp))
         Column(Modifier.weight(1f)) {
+            Text(component.title, color = Ink, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
             Text(
-                text = component.title,
-                color = Ink,
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold,
-            )
-            Text(
-                text = if (component.supported) {
-                    component.sdkPackage.ifEmpty { component.mode }
-                } else {
-                    component.reason
-                },
+                text = if (component.supported) component.sdkPackage.ifEmpty { component.mode } else component.reason,
                 color = if (component.supported) TechBlueStrong else Warning,
                 style = MaterialTheme.typography.bodySmall,
                 maxLines = 2,

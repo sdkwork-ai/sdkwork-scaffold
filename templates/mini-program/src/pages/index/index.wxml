@@ -4,72 +4,109 @@
     <text class="surface-chip">小程序</text>
   </view>
 
-  <text class="eyebrow">SDKWORK APPLICATION FOUNDATION</text>
-  <text class="title">{{appName}}</text>
-  <text class="lede">__APP_DESCRIPTION__</text>
+  <block wx:if="{{activeTab === 'overview'}}">
+    <text class="eyebrow">SDKWORK APPLICATION FOUNDATION</text>
+    <text class="title">{{appName}}</text>
+    <text class="lede">__APP_DESCRIPTION__</text>
 
-  <view class="stats">
-    <view class="stat">
-      <text class="stat-label">Components</text>
-      <text class="stat-value">{{components.length}}</text>
-    </view>
-    <view class="stat">
-      <text class="stat-label">Linked</text>
-      <text class="stat-value">{{linkedCount}}</text>
-    </view>
-    <view class="stat">
-      <text class="stat-label">Plan</text>
-      <text class="stat-value">{{plannedCount}}</text>
-    </view>
-  </view>
-
-  <view class="card">
-    <text class="card-title">Foundation status</text>
-    <text class="card-subtitle">The initial delivery boundary is visible and explicit.</text>
-
-    <view class="status-row">
-      <view class="status-copy">
-        <text class="row-title">Repository baseline</text>
-        <text class="row-detail">Canon, identity, workspace metadata, and root layout</text>
+    <view class="stats">
+      <view class="stat">
+        <text class="stat-label">Architectures</text>
+        <text class="stat-value">{{surfaces.length}}</text>
       </view>
-      <text class="badge ok">Ready</text>
-    </view>
-    <view class="status-row">
-      <view class="status-copy">
-        <text class="row-title">Architecture surface</text>
-        <text class="row-detail">Mini-program TypeScript root with component registry</text>
+      <view class="stat">
+        <text class="stat-label">Linked</text>
+        <text class="stat-value">{{linkedCount}}</text>
       </view>
-      <text class="badge ok">Ready</text>
-    </view>
-    <view class="status-row">
-      <view class="status-copy">
-        <text class="row-title">First vertical workflow</text>
-        <text class="row-detail">Requirements, API contracts, and package modules</text>
+      <view class="stat">
+        <text class="stat-label">Plan</text>
+        <text class="stat-value">{{plannedCount}}</text>
       </view>
-      <text class="badge warn">Next</text>
     </view>
-  </view>
 
-  <view class="card">
-    <text class="card-title">Integrated components</text>
-    <text class="card-subtitle">{{linkedCount}} linked · {{plannedCount}} planned</text>
+    <view class="card">
+      <text class="card-title">Foundation status</text>
+      <text class="card-subtitle">The initial delivery boundary is visible and explicit.</text>
 
-    <view wx:if="{{components.length === 0}}" class="empty">No common component is enabled for this application.</view>
-    <view wx:for="{{components}}" wx:key="id" class="component-row">
-      <text class="component-mark">{{item.mark}}</text>
-      <view class="component-copy">
-        <text class="row-title">{{item.title}}</text>
-        <text class="row-detail">{{item.supported ? item.sdkPackage : item.reason}}</text>
+      <view class="status-row">
+        <view class="status-copy">
+          <text class="row-title">Repository baseline</text>
+          <text class="row-detail">Canon, identity, workspace metadata, and root layout</text>
+        </view>
+        <text class="badge ok">Ready</text>
       </view>
-      <text class="badge {{item.supported ? 'ok' : 'warn'}}">{{item.supported ? 'Linked' : 'Plan'}}</text>
+      <view class="status-row">
+        <view class="status-copy">
+          <text class="row-title">Architecture surface</text>
+          <text class="row-detail">Mini-program TypeScript root with bottom tabs</text>
+        </view>
+        <text class="badge ok">Ready</text>
+      </view>
+      <view class="status-row">
+        <view class="status-copy">
+          <text class="row-title">First vertical workflow</text>
+          <text class="row-detail">Requirements, API contracts, and package modules</text>
+        </view>
+        <text class="badge warn">Next</text>
+      </view>
     </view>
-  </view>
+  </block>
 
-  <view class="callout">
-    <text class="eyebrow">RECOMMENDED NEXT MOVE</text>
-    <text class="callout-title">Write the requirement before the screen.</text>
-    <text class="callout-body">Capture the first workflow in docs/product/prd/PRD.md, record the boundary decision, then add API, SDK, and package work.</text>
-  </view>
+  <block wx:elif="{{activeTab === 'surfaces'}}">
+    <text class="eyebrow">ARCHITECTURE ROOTS</text>
+    <text class="title">Application surfaces</text>
+    <text class="lede">Each architecture keeps its own root, manifest, and toolchain.</text>
+
+    <view class="card">
+      <view wx:for="{{surfaces}}" wx:key="id" class="surface-row">
+        <text class="surface-mark">{{item.mark}}</text>
+        <view class="surface-copy">
+          <text class="row-title">{{item.title}}</text>
+          <text class="row-detail">{{item.root}}</text>
+        </view>
+        <text class="surface-kind">{{item.kind}}</text>
+      </view>
+    </view>
+  </block>
+
+  <block wx:else>
+    <text class="eyebrow">COMPOSITION</text>
+    <text class="title">Component composition</text>
+    <text class="lede">{{linkedCount}} linked · {{plannedCount}} planned · resolved from sibling SDK manifests.</text>
+
+    <view class="card">
+      <view wx:if="{{components.length === 0}}" class="empty">No common component is enabled for this application.</view>
+      <view wx:for="{{components}}" wx:key="id" class="component-row">
+        <text class="component-mark">{{item.mark}}</text>
+        <view class="component-copy">
+          <text class="row-title">{{item.title}}</text>
+          <text class="row-detail">{{item.supported ? item.sdkPackage : item.reason}}</text>
+        </view>
+        <text class="badge {{item.supported ? 'ok' : 'warn'}}">{{item.supported ? 'Linked' : 'Plan'}}</text>
+      </view>
+    </view>
+
+    <view class="callout">
+      <text class="eyebrow">RECOMMENDED NEXT MOVE</text>
+      <text class="callout-title">Write the requirement before the screen.</text>
+      <text class="callout-body">Capture the first workflow in docs/product/prd/PRD.md, record the boundary decision, then add API, SDK, and package work.</text>
+    </view>
+  </block>
 
   <text class="footer">{{appCode}} · 小程序</text>
+
+  <view class="tabbar">
+    <view class="tab-item {{activeTab === 'overview' ? 'active' : ''}}" data-tab="overview" bindtap="switchTab">
+      <text class="tab-icon">◫</text>
+      <text class="tab-label">Overview</text>
+    </view>
+    <view class="tab-item {{activeTab === 'surfaces' ? 'active' : ''}}" data-tab="surfaces" bindtap="switchTab">
+      <text class="tab-icon">▤</text>
+      <text class="tab-label">Surfaces</text>
+    </view>
+    <view class="tab-item {{activeTab === 'components' ? 'active' : ''}}" data-tab="components" bindtap="switchTab">
+      <text class="tab-icon">◇</text>
+      <text class="tab-label">Components</text>
+    </view>
+  </view>
 </view>

@@ -578,6 +578,143 @@ code {
   font-size: 11px;
 }
 
+.scaffold-mobile-appbar,
+.scaffold-bottom-tabs {
+  display: none;
+}
+
+/* H5 uses a compact app bar and a fixed bottom tab bar, not the PC rail. */
+.scaffold-app[data-surface="h5"] {
+  display: block;
+  padding-bottom: calc(64px + env(safe-area-inset-bottom));
+}
+
+.scaffold-app[data-surface="h5"] .scaffold-rail {
+  display: none;
+}
+
+.scaffold-app[data-surface="h5"] .scaffold-mobile-appbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--scaffold-nav);
+  color: #fff;
+}
+
+.scaffold-app[data-surface="h5"] .scaffold-mobile-appbar .scaffold-rail-brand {
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+}
+
+.scaffold-app[data-surface="h5"] .scaffold-mobile-appbar strong {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 15px;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.scaffold-app[data-surface="h5"] .scaffold-mobile-appbar .scaffold-surface-chip {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--scaffold-nav-ink);
+}
+
+.scaffold-app[data-surface="h5"] .scaffold-main {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 18px 16px 28px;
+}
+
+.scaffold-app[data-surface="h5"] .scaffold-page-header {
+  flex-direction: column;
+  gap: 10px;
+}
+
+.scaffold-app[data-surface="h5"] .scaffold-header-actions {
+  display: none;
+}
+
+.scaffold-app[data-surface="h5"] .scaffold-page-title {
+  font-size: 25px;
+}
+
+.scaffold-app[data-surface="h5"] .scaffold-overview {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.scaffold-app[data-surface="h5"] .scaffold-step-grid,
+.scaffold-app[data-surface="h5"] .scaffold-component-grid {
+  grid-template-columns: 1fr;
+}
+
+.scaffold-app[data-surface="h5"] .scaffold-step {
+  min-height: 0;
+}
+
+.scaffold-app[data-surface="h5"] .scaffold-callout {
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.scaffold-app[data-surface="h5"] .scaffold-bottom-tabs {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 20;
+  display: flex;
+  min-height: 64px;
+  padding-bottom: env(safe-area-inset-bottom);
+  background: var(--scaffold-surface);
+}
+
+.scaffold-bottom-tab {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 0;
+  background: transparent;
+  color: var(--scaffold-muted);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 550;
+  cursor: pointer;
+}
+
+.scaffold-bottom-tab span:first-child {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.scaffold-bottom-tab[aria-current="page"] {
+  color: var(--scaffold-accent);
+  font-weight: 650;
+}
+
+/* Mobile tab content: only one primary group is visible at a time. */
+.scaffold-app[data-surface="h5"][data-active-tab="overview"] #surfaces,
+.scaffold-app[data-surface="h5"][data-active-tab="overview"] #components,
+.scaffold-app[data-surface="h5"][data-active-tab="overview"] .scaffold-callout,
+.scaffold-app[data-surface="h5"][data-active-tab="surfaces"] #overview,
+.scaffold-app[data-surface="h5"][data-active-tab="surfaces"] .scaffold-panel:not(#surfaces),
+.scaffold-app[data-surface="h5"][data-active-tab="surfaces"] .scaffold-callout,
+.scaffold-app[data-surface="h5"][data-active-tab="components"] #overview,
+.scaffold-app[data-surface="h5"][data-active-tab="components"] .scaffold-panel:not(#components) {
+  display: none;
+}
+
 @media (max-width: 1020px) {
   .scaffold-main {
     padding: 30px 28px 48px;

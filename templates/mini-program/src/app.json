@@ -4,10 +4,10 @@
   ],
   "window": {
     "navigationBarTitleText": "__APP_NAME__",
-    "navigationBarBackgroundColor": "#08110f",
-    "navigationBarTextStyle": "white",
-    "backgroundColor": "#08110f",
-    "backgroundTextStyle": "light"
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f2f5fa",
+    "backgroundTextStyle": "dark"
   },
   "sitemapLocation": "sitemap.json"
 }

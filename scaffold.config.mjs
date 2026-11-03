@@ -6,7 +6,7 @@
  * components.config.mjs; their real SDK package paths are resolved from each
  * sibling repository's sdk-manifest.json at generation time.
  */
-export const SCAFFOLD_VERSION = '1.1.0';
+export const SCAFFOLD_VERSION = '1.2.0';
 
 export const APP_TYPES = [
   'APP_REACT',

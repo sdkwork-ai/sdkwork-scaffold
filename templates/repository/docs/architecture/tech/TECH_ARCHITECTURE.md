@@ -27,6 +27,31 @@ The app shells are thin composition roots. Business behavior, service ports, gen
 | Components | __COMPONENT_IDS__ |
 | Local verification | `pnpm check`, `pnpm test`, `pnpm build` |
 
+### 2.1 Visual Baseline
+
+The generated client surfaces use the tech-blue SDKWork Doctor visual baseline:
+
+| Token | Value | Role |
+| --- | --- | --- |
+| Canvas | `#f2f5fa` | Page background |
+| Surface | `#ffffff` | Cards and panels |
+| Surface alt | `#e6edf8` | Nested rows and stat tiles |
+| Chrome navy | `#061a3a` | PC rail / H5 app bar / navigation chrome |
+| Accent | `#0a5cff` | Single saturated action and selection color |
+| Accent strong | `#0747c9` | Hover and emphasis text |
+| Accent soft | `#e7efff` | Selected/soft action background |
+| Ink | `#0a1324` | Primary text |
+| Muted | `#5a6b85` | Secondary text |
+| Radius | `14px` / `10px` | Panels / nested controls |
+
+Rules:
+
+- Flat and borderless: no card borders, no shadows, no gradients.
+- Separation comes from canvas/surface/tonal layers, not strokes.
+- One accent family; status uses the shared success/warn/error/skipped tokens.
+- PC uses an 88px navy rail; H5, Flutter, and native shells use a compact top bar.
+- Flutter mirrors the same tokens in `lib/theme/app_theme.dart`; native shells keep the same color constants in their component registry.
+
 ## 3. System Boundaries And Modules
 
 - `apps/sdkwork-__APP_CODE__-<surface>/` — application surface roots.

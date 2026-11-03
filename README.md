@@ -198,6 +198,30 @@ sdkwork-<code>/
 
 Browser/tablet roots are buildable with Vite. Flutter, iOS, Android, HarmonyOS, and mini-program roots carry their native manifests and toolchain instructions. Native SDK packages are recorded in each root's `specs/integration.plan.json` and component registry.
 
+## Visual Baseline
+
+All generated clients use the tech-blue, flat, borderless visual system of
+`sdkwork-doctor`:
+
+| Token | Value | Role |
+| --- | --- | --- |
+| Canvas | `#f2f5fa` | Page background |
+| Surface | `#ffffff` | Cards and panels |
+| Surface alt | `#e6edf8` | Nested rows and stat tiles |
+| Chrome navy | `#061a3a` | PC rail / H5 app bar |
+| Accent | `#0a5cff` | Single action and selection accent |
+| Accent strong | `#0747c9` | Hover and emphasis |
+| Accent soft | `#e7efff` | Soft action background |
+| Ink | `#0a1324` | Primary text |
+| Muted | `#5a6b85` | Secondary text |
+| Radius | `14px` / `10px` | Panels / controls |
+
+Rules: no card borders, no shadows, no gradients. Separation comes from
+canvas/surface/tonal layers. PC uses an 88px navy icon rail; H5 and native
+surfaces use a compact top bar. Flutter carries the same tokens in
+`lib/theme/app_theme.dart`; iOS, Android, HarmonyOS, and the mini program keep
+the same palette in their generated shells.
+
 ## Standard Commands
 
 ```bash

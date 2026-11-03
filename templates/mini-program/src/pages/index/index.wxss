@@ -1,87 +1,211 @@
 .page {
   min-height: 100vh;
-  padding: 48rpx 40rpx 80rpx;
+  padding: 16px 16px 36px;
   box-sizing: border-box;
-  background: radial-gradient(circle at 10% 0%, rgba(92, 147, 107, 0.28), transparent 46%), #08110f;
+  background: #f2f5fa;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0 14px;
+}
+
+.app-name {
+  color: #0a1324;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.surface-chip {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #e7efff;
+  color: #0747c9;
+  font-size: 11px;
+  font-weight: 600;
 }
 
 .eyebrow {
-  color: #b8f26b;
-  font-size: 20rpx;
-  font-weight: 800;
-  letter-spacing: 4rpx;
+  display: block;
+  color: #0a5cff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
 }
 
 .title {
-  margin-top: 28rpx;
-  color: #d7ff9e;
-  font-size: 72rpx;
+  display: block;
+  margin-top: 6px;
+  color: #0a1324;
+  font-size: 26px;
   font-weight: 700;
-  line-height: 1.05;
+  letter-spacing: -0.8px;
 }
 
 .lede {
-  margin-top: 24rpx;
-  color: #a7b4ac;
-  font-size: 30rpx;
-  line-height: 1.65;
+  display: block;
+  margin-top: 8px;
+  color: #5a6b85;
+  font-size: 13px;
+  line-height: 1.6;
 }
 
-.section-title {
-  margin-top: 72rpx;
-  margin-bottom: 22rpx;
-  color: #f4f7f2;
-  font-size: 34rpx;
+.stats {
+  display: flex;
+  gap: 10px;
+  margin: 16px 0 12px;
+}
+
+.stat {
+  flex: 1;
+  min-width: 0;
+  padding: 12px;
+  border-radius: 10px;
+  background: #e6edf8;
+  box-sizing: border-box;
+}
+
+.stat-label {
+  display: block;
+  color: #5a6b85;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  display: block;
+  margin-top: 4px;
+  color: #0a1324;
+  font-size: 22px;
   font-weight: 700;
 }
 
 .card {
-  position: relative;
-  margin-bottom: 18rpx;
-  padding: 28rpx;
-  border: 1rpx solid rgba(198, 232, 210, 0.14);
-  border-radius: 24rpx;
-  background: rgba(16, 32, 25, 0.86);
+  margin-bottom: 12px;
+  padding: 18px;
+  border-radius: 14px;
+  background: #ffffff;
 }
 
 .card-title {
-  color: #f4f7f2;
-  font-size: 30rpx;
+  display: block;
+  color: #0a1324;
+  font-size: 16px;
   font-weight: 600;
 }
 
-.card-detail {
-  margin-top: 10rpx;
-  color: #a7b4ac;
-  font-size: 22rpx;
+.card-subtitle {
+  display: block;
+  margin-top: 4px;
+  margin-bottom: 12px;
+  color: #5a6b85;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.status-row,
+.component-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 8px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #e6edf8;
+}
+
+.status-copy,
+.component-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.row-title {
+  display: block;
+  color: #0a1324;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.row-detail {
+  display: block;
+  margin-top: 2px;
+  color: #5a6b85;
+  font-size: 11px;
+  line-height: 1.5;
   word-break: break-all;
 }
 
-.card-state {
-  position: absolute;
-  top: 28rpx;
-  right: 28rpx;
-  font-size: 18rpx;
-  font-weight: 800;
-  letter-spacing: 2rpx;
+.component-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: #0a5cff;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
-.card-state.ready {
-  color: #b8f26b;
+.badge {
+  flex: 0 0 auto;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
-.card-state.planned {
-  color: #e6c67d;
+.badge.ok {
+  background: #e3f7ef;
+  color: #0e9f6e;
+}
+
+.badge.warn {
+  background: #fff4e0;
+  color: #b26a00;
 }
 
 .empty {
-  color: #a7b4ac;
-  font-size: 26rpx;
+  color: #5a6b85;
+  font-size: 12px;
+}
+
+.callout {
+  margin-top: 12px;
+  padding: 18px;
+  border-radius: 14px;
+  background: #e7efff;
+}
+
+.callout-title {
+  display: block;
+  margin-top: 6px;
+  color: #0a1324;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.callout-body {
+  display: block;
+  margin-top: 6px;
+  color: #5a6b85;
+  font-size: 12px;
+  line-height: 1.6;
 }
 
 .footer {
-  margin-top: 56rpx;
-  color: #718078;
+  display: block;
+  margin-top: 18px;
+  color: #5a6b85;
+  font-size: 10px;
   font-family: monospace;
-  font-size: 22rpx;
 }

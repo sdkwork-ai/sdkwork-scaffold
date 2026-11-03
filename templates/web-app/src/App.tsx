@@ -2,6 +2,7 @@ import { integratedComponents } from './composition/components';
 
 const surface = '__SURFACE__';
 const surfaceTitle = '__SURFACE_TITLE__';
+const architectureRoots = __ARCHITECTURE_ROOTS_JSON__;
 const deploymentProfile = import.meta.env.VITE_SDKWORK_DEPLOYMENT_PROFILE
   ?? import.meta.env.MODE;
 
@@ -19,7 +20,7 @@ const steps: readonly FoundationStep[] = [
   },
   {
     title: 'Architecture surfaces',
-    body: 'Web, tablet, native, Flutter, and mini-program roots share one product identity while keeping independent architecture roots and package manifests.',
+    body: 'Web, tablet, native, Flutter, and mini-program roots share one product identity while keeping independent architecture roots.',
     state: 'ready',
   },
   {
@@ -30,64 +31,84 @@ const steps: readonly FoundationStep[] = [
 ];
 
 export default function App() {
+  const linked = integratedComponents.filter((component) => component.supported).length;
+  const planned = integratedComponents.length - linked;
+
   return (
-    <div className="app" data-sdkwork-app-ready data-surface={surface}>
-      <div className="ambient ambient-one" aria-hidden="true" />
-      <div className="ambient ambient-two" aria-hidden="true" />
-
-      <header className="topbar">
-        <a className="brand" href="/" aria-label="__APP_NAME__ home">
-          <span className="brand-mark" aria-hidden="true">__APP_INITIALS__</span>
-          <span className="brand-name">__APP_NAME__</span>
+    <div className="scaffold-app" data-surface={surface}>
+      <aside className="scaffold-rail">
+        <a className="scaffold-rail-brand" href="#overview" aria-label="__APP_NAME__ home">
+          __APP_INITIALS__
         </a>
-        <div className="surface-pill">
-          <span className="status-dot" aria-hidden="true" />
-          {surfaceTitle} surface
+        <nav className="scaffold-rail-nav" aria-label="Application sections">
+          <a className="scaffold-rail-item" href="#overview" aria-current="page">
+            <span className="scaffold-rail-icon" aria-hidden="true">◫</span>
+            <span>Overview</span>
+          </a>
+          <a className="scaffold-rail-item" href="#surfaces">
+            <span className="scaffold-rail-icon" aria-hidden="true">▤</span>
+            <span>Surfaces</span>
+          </a>
+          <a className="scaffold-rail-item" href="#components">
+            <span className="scaffold-rail-icon" aria-hidden="true">◇</span>
+            <span>Components</span>
+          </a>
+        </nav>
+        <div className="scaffold-rail-footer">
+          <span className="scaffold-rail-meta">{deploymentProfile}</span>
+          <code>pnpm dev</code>
         </div>
-      </header>
+      </aside>
 
-      <main id="main" className="main">
-        <section className="hero" aria-labelledby="hero-title">
-          <p className="eyebrow">SDKWork application foundation</p>
-          <h1 id="hero-title">
-            A clean start for
-            <span> __APP_NAME__.</span>
-          </h1>
-          <p className="lede">
-            __APP_DESCRIPTION__
-          </p>
-          <div className="hero-actions">
-            <a className="button primary" href="#foundation">Explore the foundation</a>
-            <code className="command">pnpm dev</code>
+      <main className="scaffold-main">
+        <header className="scaffold-page-header">
+          <div>
+            <p className="scaffold-eyebrow">SDKWork application foundation</p>
+            <h1 className="scaffold-page-title">__APP_NAME__</h1>
+            <p className="scaffold-page-subtitle">
+              __APP_DESCRIPTION__
+            </p>
           </div>
-          <dl className="facts" aria-label="Application facts">
-            <div>
-              <dt>Application</dt>
-              <dd>sdkwork-__APP_CODE__</dd>
-            </div>
-            <div>
-              <dt>Domain</dt>
-              <dd>__APP_DOMAIN__</dd>
-            </div>
-            <div>
-              <dt>Mode</dt>
-              <dd>{deploymentProfile}</dd>
-            </div>
-          </dl>
+          <div className="scaffold-header-actions">
+            <a className="scaffold-button" data-tone="primary" href="#components">Review components</a>
+            <span className="scaffold-surface-chip">{surfaceTitle} surface</span>
+          </div>
+        </header>
+
+        <section className="scaffold-overview" id="overview" aria-label="Foundation overview">
+          <article className="scaffold-stat">
+            <span className="scaffold-stat-label">Architectures</span>
+            <strong className="scaffold-stat-value">{architectureRoots.length}</strong>
+          </article>
+          <article className="scaffold-stat">
+            <span className="scaffold-stat-label">Components</span>
+            <strong className="scaffold-stat-value">{integratedComponents.length}</strong>
+          </article>
+          <article className="scaffold-stat">
+            <span className="scaffold-stat-label">Linked SDKs</span>
+            <strong className="scaffold-stat-value">{linked}</strong>
+          </article>
+          <article className="scaffold-stat">
+            <span className="scaffold-stat-label">Profile</span>
+            <strong className="scaffold-stat-value scaffold-stat-value-small">{deploymentProfile}</strong>
+          </article>
         </section>
 
-        <section className="foundation" id="foundation" aria-labelledby="foundation-title">
-          <div className="section-heading">
-            <p className="eyebrow">Initialized scope</p>
-            <h2 id="foundation-title">A thin shell with explicit next steps.</h2>
+        <section className="scaffold-panel" aria-labelledby="foundation-title">
+          <div className="scaffold-panel-head">
+            <div>
+              <h2 className="scaffold-panel-title" id="foundation-title">Foundation status</h2>
+              <p className="scaffold-panel-subtitle">The initial delivery boundary is visible and explicit.</p>
+            </div>
+            <span className="scaffold-badge" data-status="ok">Ready</span>
           </div>
-          <div className="steps">
+          <div className="scaffold-step-grid">
             {steps.map((step, index) => (
-              <article className="step" key={step.title}>
-                <span className={`step-index ${step.state}`}>{String(index + 1).padStart(2, '0')}</span>
+              <article className="scaffold-step" key={step.title}>
+                <span className={`scaffold-step-index ${step.state}`}>{String(index + 1).padStart(2, '0')}</span>
                 <h3>{step.title}</h3>
                 <p>{step.body}</p>
-                <span className={`step-state ${step.state}`}>
+                <span className="scaffold-badge" data-status={step.state === 'ready' ? 'ok' : 'warn'}>
                   {step.state === 'ready' ? 'Ready' : 'Next'}
                 </span>
               </article>
@@ -95,22 +116,56 @@ export default function App() {
           </div>
         </section>
 
-        <section className="components" aria-labelledby="components-title">
-          <div className="section-heading">
-            <p className="eyebrow">Composition</p>
-            <h2 id="components-title">Shared capabilities, resolved per surface.</h2>
+        <section className="scaffold-panel" id="surfaces" aria-labelledby="surfaces-title">
+          <div className="scaffold-panel-head">
+            <div>
+              <h2 className="scaffold-panel-title" id="surfaces-title">Surfaces</h2>
+              <p className="scaffold-panel-subtitle">Each architecture keeps its own root, manifest, and toolchain.</p>
+            </div>
+            <span className="scaffold-badge" data-status="skipped">{architectureRoots.length} roots</span>
+          </div>
+          <ul className="scaffold-list">
+            {architectureRoots.map((architecture) => (
+              <li className="scaffold-list-row" key={architecture.id}>
+                <span className="scaffold-list-mark" aria-hidden="true">
+                  {architecture.id.slice(0, 2).toUpperCase()}
+                </span>
+                <span className="scaffold-list-copy">
+                  <strong>{architecture.id === surface ? `${architecture.title} · current` : architecture.title}</strong>
+                  <code>{architecture.root}</code>
+                </span>
+                <span className="scaffold-list-meta">{architecture.kind}</span>
+                <span className="scaffold-badge" data-status={architecture.kind === 'web' ? 'ok' : 'skipped'}>
+                  {architecture.kind === 'web' ? 'Buildable' : 'Toolchain'}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="scaffold-panel" id="components" aria-labelledby="components-title">
+          <div className="scaffold-panel-head">
+            <div>
+              <h2 className="scaffold-panel-title" id="components-title">Component composition</h2>
+              <p className="scaffold-panel-subtitle">
+                {linked} linked · {planned} planned · resolved from sibling SDK manifests.
+              </p>
+            </div>
+            <span className="scaffold-badge" data-status={planned > 0 ? 'warn' : 'ok'}>
+              {planned > 0 ? 'Review plan' : 'All linked'}
+            </span>
           </div>
           {integratedComponents.length === 0 ? (
-            <p className="empty-state">No common component is enabled for this application.</p>
+            <p className="scaffold-empty">No common component is enabled for this application.</p>
           ) : (
-            <div className="component-grid">
+            <div className="scaffold-component-grid">
               {integratedComponents.map((component) => (
-                <article className="component-card" key={component.id}>
-                  <div className="component-heading">
-                    <span className="component-mark" aria-hidden="true">
+                <article className="scaffold-component" key={component.id}>
+                  <div className="scaffold-component-head">
+                    <span className="scaffold-component-mark" aria-hidden="true">
                       {component.id.slice(0, 2).toUpperCase()}
                     </span>
-                    <span className={`component-state ${component.supported ? 'ready' : 'planned'}`}>
+                    <span className="scaffold-badge" data-status={component.supported ? 'ok' : 'warn'}>
                       {component.supported ? 'Linked' : 'Plan'}
                     </span>
                   </div>
@@ -123,23 +178,22 @@ export default function App() {
           )}
         </section>
 
-        <section className="next" aria-labelledby="next-title">
+        <section className="scaffold-callout" aria-label="Next step">
           <div>
-            <p className="eyebrow">Recommended next move</p>
-            <h2 id="next-title">Write the requirement before the screen.</h2>
+            <p className="scaffold-eyebrow">Recommended next move</p>
+            <h2>Write the requirement before the screen.</h2>
           </div>
           <p>
-            Capture the first workflow in <code>docs/product/prd/PRD.md</code>, record the
-            boundary decision, then add API, SDK, and package work through the owning
-            architecture standard.
+            Capture the first workflow in <code>docs/product/prd/PRD.md</code>, record the boundary
+            decision, then add API, SDK, and package work through the owning architecture standard.
           </p>
         </section>
-      </main>
 
-      <footer className="footer">
-        <span>sdkwork-__APP_CODE__ · __SURFACE_TITLE__</span>
-        <span>Generated __GENERATED_DATE__</span>
-      </footer>
+        <footer className="scaffold-footer">
+          <span>sdkwork-__APP_CODE__ · {surfaceTitle}</span>
+          <span>Generated __GENERATED_DATE__</span>
+        </footer>
+      </main>
     </div>
   );
 }

@@ -1,15 +1,75 @@
 <view class="page">
-  <view class="eyebrow">SDKWORK APPLICATION FOUNDATION</view>
-  <view class="title">{{appName}}</view>
-  <view class="lede">WeChat mini-program surface initialized with SDKWork component composition.</view>
-
-  <view class="section-title">Integrated components</view>
-  <view wx:if="{{components.length === 0}}" class="empty">No common component is enabled for this application.</view>
-  <view wx:for="{{components}}" wx:key="id" class="card">
-    <view class="card-title">{{item.title}}</view>
-    <view class="card-detail">{{item.supported ? item.sdkPackage : item.reason}}</view>
-    <view class="card-state {{item.supported ? 'ready' : 'planned'}}">{{item.supported ? 'Linked' : 'Plan'}}</view>
+  <view class="topbar">
+    <text class="app-name">{{appName}}</text>
+    <text class="surface-chip">小程序</text>
   </view>
 
-  <view class="footer">{{appCode}}</view>
+  <text class="eyebrow">SDKWORK APPLICATION FOUNDATION</text>
+  <text class="title">{{appName}}</text>
+  <text class="lede">__APP_DESCRIPTION__</text>
+
+  <view class="stats">
+    <view class="stat">
+      <text class="stat-label">Components</text>
+      <text class="stat-value">{{components.length}}</text>
+    </view>
+    <view class="stat">
+      <text class="stat-label">Linked</text>
+      <text class="stat-value">{{linkedCount}}</text>
+    </view>
+    <view class="stat">
+      <text class="stat-label">Plan</text>
+      <text class="stat-value">{{plannedCount}}</text>
+    </view>
+  </view>
+
+  <view class="card">
+    <text class="card-title">Foundation status</text>
+    <text class="card-subtitle">The initial delivery boundary is visible and explicit.</text>
+
+    <view class="status-row">
+      <view class="status-copy">
+        <text class="row-title">Repository baseline</text>
+        <text class="row-detail">Canon, identity, workspace metadata, and root layout</text>
+      </view>
+      <text class="badge ok">Ready</text>
+    </view>
+    <view class="status-row">
+      <view class="status-copy">
+        <text class="row-title">Architecture surface</text>
+        <text class="row-detail">Mini-program TypeScript root with component registry</text>
+      </view>
+      <text class="badge ok">Ready</text>
+    </view>
+    <view class="status-row">
+      <view class="status-copy">
+        <text class="row-title">First vertical workflow</text>
+        <text class="row-detail">Requirements, API contracts, and package modules</text>
+      </view>
+      <text class="badge warn">Next</text>
+    </view>
+  </view>
+
+  <view class="card">
+    <text class="card-title">Integrated components</text>
+    <text class="card-subtitle">{{linkedCount}} linked · {{plannedCount}} planned</text>
+
+    <view wx:if="{{components.length === 0}}" class="empty">No common component is enabled for this application.</view>
+    <view wx:for="{{components}}" wx:key="id" class="component-row">
+      <text class="component-mark">{{item.mark}}</text>
+      <view class="component-copy">
+        <text class="row-title">{{item.title}}</text>
+        <text class="row-detail">{{item.supported ? item.sdkPackage : item.reason}}</text>
+      </view>
+      <text class="badge {{item.supported ? 'ok' : 'warn'}}">{{item.supported ? 'Linked' : 'Plan'}}</text>
+    </view>
+  </view>
+
+  <view class="callout">
+    <text class="eyebrow">RECOMMENDED NEXT MOVE</text>
+    <text class="callout-title">Write the requirement before the screen.</text>
+    <text class="callout-body">Capture the first workflow in docs/product/prd/PRD.md, record the boundary decision, then add API, SDK, and package work.</text>
+  </view>
+
+  <text class="footer">{{appCode}} · 小程序</text>
 </view>

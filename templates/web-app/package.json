@@ -1,0 +1,34 @@
+{
+  "name": "__APP_PACKAGE_NAME__",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "__SURFACE_TITLE__ surface for __APP_NAME__.",
+  "scripts": {
+    "dev": "pnpm --dir ../.. dev",
+    "dev:standalone": "pnpm --dir ../.. dev:standalone",
+    "dev:cloud": "pnpm --dir ../.. dev:cloud",
+    "stop": "pnpm --dir ../.. stop",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "clean": "pnpm --dir ../.. clean"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "typescript": "^5.9.0",
+    "vite": "^7.1.0"
+  },
+  "sdkwork": {
+    "surface": "__SURFACE__",
+    "devPort": __SURFACE_PORT__,
+    "architectureSpec": "__SURFACE_ARCHITECTURE_SPEC__"
+  }
+}

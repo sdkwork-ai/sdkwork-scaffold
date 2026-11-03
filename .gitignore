@@ -1,0 +1,14 @@
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+*.js.map
+*.d.ts.map
+.DS_Store
+Thumbs.db
+*.log
+.sdkwork/local/
+.sdkwork/tmp/
+.sdkwork/cache/
+.sdkwork/secrets/
+.sdkwork/manual-backups/

@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+target/
+coverage/
+*.tsbuildinfo
+*.js.map
+*.d.ts.map
+
+# Local environment and secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local tool and OS state
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
+
+# Scaffold-managed local state
+.sdkwork/local/
+.sdkwork/tmp/
+.sdkwork/cache/
+.sdkwork/secrets/
+.sdkwork/manual-backups/
+
+# Database and runtime state
+*.sqlite
+*.sqlite3
+*.db

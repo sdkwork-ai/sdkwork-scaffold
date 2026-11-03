@@ -1,0 +1,19 @@
+{
+  "name": "sdkwork-scaffold",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Composable repository and application scaffold for SDKWork projects.",
+  "license": "AGPL-3.0-or-later",
+  "bin": {
+    "sdkwork-scaffold": "./bin/sdkwork-scaffold.mjs"
+  },
+  "scripts": {
+    "scaffold": "node bin/sdkwork-scaffold.mjs",
+    "test": "node --test \"tests/*.test.mjs\"",
+    "check": "node bin/sdkwork-scaffold.mjs --self-check && node --test \"tests/*.test.mjs\""
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

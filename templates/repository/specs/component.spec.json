@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "kind": "sdkwork.component.spec",
+  "component": {
+    "name": "sdkwork-__APP_CODE__",
+    "displayName": "__APP_NAME__",
+    "version": "0.1.0",
+    "type": "application",
+    "root": ".",
+    "domain": "__APP_DOMAIN__",
+    "capability": "__APP_CODE__",
+    "surface": "app",
+    "languages": ["typescript", "react"],
+    "generated": false,
+    "manifests": ["package.json", "agent.app.config.json"]
+  },
+  "canonicalSpecs": [
+    {
+      "file": "APPLICATION_SPEC.md",
+      "path": "__SPECS_REL__/APPLICATION_SPEC.md",
+      "purpose": "Application composition and module boundaries."
+    },
+    {
+      "file": "APP_COMPOSITION_SPEC.md",
+      "path": "__SPECS_REL__/APP_COMPOSITION_SPEC.md",
+      "purpose": "Native-authority application composition and runtime metadata."
+    },
+    {
+      "file": "APP_MANIFEST_SPEC.md",
+      "path": "__SPECS_REL__/APP_MANIFEST_SPEC.md",
+      "purpose": "Application identity and release declaration."
+    },
+    {
+      "file": "CODE_STYLE_SPEC.md",
+      "path": "__SPECS_REL__/CODE_STYLE_SPEC.md",
+      "purpose": "Authored code structure and build integrity."
+    },
+    {
+      "file": "NAMING_SPEC.md",
+      "path": "__SPECS_REL__/NAMING_SPEC.md",
+      "purpose": "Canonical naming."
+    },
+    {
+      "file": "TYPESCRIPT_CODE_SPEC.md",
+      "path": "__SPECS_REL__/TYPESCRIPT_CODE_SPEC.md",
+      "purpose": "TypeScript package and script rules."
+    }
+  ],
+  "contracts": {
+    "layerRole": "runtime-composition",
+    "publicExports": ["."],
+    "providedPorts": [],
+    "requiredPorts": [],
+    "runtimeEntrypoints": ["package.json#scripts.dev", "package.json#scripts.build"],
+    "routeManifest": null,
+    "sdkClients": [],
+    "sdkDependencies": [],
+    "permissionComposition": {},
+    "dependencyApiExports": [],
+    "dependencyApiSurfaces": [],
+    "events": [],
+    "configKeys": ["agent.app.config.json", "etc/sdkwork.deployment.config.json"]
+  },
+  "verification": {
+    "commands": ["pnpm check", "pnpm test", "pnpm build"]
+  }
+}

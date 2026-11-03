@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 3,
+  "kind": "agent.app",
+  "app": {
+    "key": "sdkwork-__APP_CODE__",
+    "name": "sdkwork-__APP_CODE__",
+    "displayName": "__APP_NAME__",
+    "description": "__APP_DESCRIPTION__",
+    "officialWebsiteUrl": "__APP_SITE_URL__",
+    "appType": "__APP_TYPE__",
+    "identifiers": {
+      "packageName": "__APP_IDENTIFIER__",
+      "bundleId": "__APP_IDENTIFIER__",
+      "desktopAppId": "__APP_IDENTIFIER__",
+      "containerImage": "sdkwork/__APP_CODE__"
+    }
+  },
+  "backend": {},
+  "runtime": {
+    "family": "web",
+    "framework": "react",
+    "defaultPlatform": "WEB",
+    "defaultArchitecture": "x64",
+    "supportedDeploymentProfiles": ["standalone", "cloud"],
+    "defaultDeploymentProfile": "standalone"
+  },
+  "media": {
+    "icons": {
+      "primary": {
+        "id": "sdkwork-__APP_CODE__-primary-icon",
+        "type": "ICON",
+        "purpose": "PRIMARY",
+        "path": "assets/media/icons/icon-1024.png",
+        "url": "https://cdn.sdkwork.com/apps/sdkwork-__APP_CODE__/assets/icon-1024.png",
+        "platform": "WEB",
+        "locale": "en-US",
+        "width": 1024,
+        "height": 1024,
+        "format": "PNG",
+        "fileSizeBytes": 0,
+        "alphaChannel": false,
+        "sortOrder": 0,
+        "enabled": true,
+        "metadata": {
+          "scaffoldIcon": true,
+          "note": "Scaffold-generated geometric icon. Replace with designed brand media before catalog or store publication."
+        }
+      },
+      "platform": []
+    },
+    "screenshots": [],
+    "previews": [],
+    "metadata": {
+      "standard": "sdkwork-app-assets.v1",
+      "assetVersion": "0.1.0",
+      "defaultLocale": "en-US",
+      "generatedPlaceholder": true
+    }
+  },
+  "publish": {
+    "status": "DRAFT",
+    "platforms": ["WEB", "H5"],
+    "installPlatforms": ["WEB", "H5"],
+    "stores": []
+  },
+  "artifacts": {
+    "installConfig": {
+      "packages": []
+    }
+  },
+  "release": {
+    "currentVersion": "0.1.0",
+    "latest": {
+      "DEV": "0.1.0",
+      "STABLE": "0.1.0"
+    },
+    "notes": [
+      {
+        "version": "0.1.0",
+        "releaseChannel": "DEV",
+        "title": "__APP_NAME__ 0.1.0",
+        "summary": "Initial SDKWork scaffold.",
+        "content": "Repository baseline and PC/H5 application shells initialized from sdkwork-scaffold.",
+        "highlights": [
+          "Standard repository layout and Canon documentation",
+          "PC and H5 React/Vite application shells",
+          "Standard pnpm command surface"
+        ],
+        "packageIds": [],
+        "publishedAt": "__GENERATED_AT__",
+        "current": true,
+        "forceUpdate": false,
+        "minSupportedVersion": "0.1.0",
+        "metadata": {}
+      }
+    ],
+    "defaultChannel": "DEV"
+  },
+  "security": {
+    "checksumRequired": false,
+    "signatureRequired": false,
+    "sbomRequired": false
+  },
+  "devApp": {
+    "enabled": true
+  },
+  "metadata": {
+    "status": "scaffold",
+    "deploymentConfig": "etc/sdkwork.deployment.config.json",
+    "scaffold": {
+      "generator": "sdkwork-scaffold",
+      "version": "__GENERATOR_VERSION__",
+      "generatedAt": "__GENERATED_AT__",
+      "surfaces": __SURFACE_LIST_JSON__
+    }
+  }
+}

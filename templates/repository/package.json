@@ -1,0 +1,29 @@
+{
+  "name": "sdkwork-__APP_CODE__",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "__APP_DESCRIPTION__",
+  "license": "AGPL-3.0-or-later",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm dev:standalone",
+    "dev:standalone": "node scripts/sdkwork-command.mjs dev --deployment-profile standalone --environment development",
+    "dev:cloud": "node scripts/sdkwork-command.mjs dev --deployment-profile cloud --environment development",
+    "stop": "node scripts/sdkwork-command.mjs stop",
+    "build": "node scripts/sdkwork-command.mjs build",
+    "test": "node scripts/sdkwork-command.mjs test",
+    "check": "node scripts/sdkwork-command.mjs check",
+    "verify": "node scripts/sdkwork-command.mjs verify",
+    "clean": "node scripts/sdkwork-command.mjs clean",
+    "typecheck": "node scripts/sdkwork-command.mjs typecheck",
+    "api:assembly:materialize": "node __SPECS_TOOLS_REL__/materialize-api-assembly.mjs --root .",
+    "api:assembly:validate": "node __SPECS_TOOLS_REL__/validate-api-assembly.mjs --root .",
+    "check:workspace": "node __SPECS_TOOLS_REL__/check-workspace-layout.mjs --root .",
+    "check:baseline": "node __SPECS_TOOLS_REL__/audit-repository-baseline.mjs --root .",
+    "check:pnpm-script-standard": "node __SPECS_TOOLS_REL__/check-pnpm-script-standard.mjs --root .",
+    "check:manifest": "node __SPECS_TOOLS_REL__/check-app-manifest-standard.mjs --root ."
+  }
+}

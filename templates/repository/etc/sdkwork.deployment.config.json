@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "kind": "sdkwork.deployment-index",
+  "application": "sdkwork-__APP_CODE__",
+  "defaultProfile": "standalone.development",
+  "profiles": {
+    "standalone.development": {
+      "config": "topology/standalone.development.env"
+    },
+    "cloud.development": {
+      "config": "topology/cloud.development.env"
+    }
+  },
+  "metadata": {
+    "status": "scaffold",
+    "note": "Browser-only scaffold. Add API, database, and deployment profiles when a runtime is introduced."
+  }
+}

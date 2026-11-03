@@ -1,0 +1,11 @@
+schemaVersion: 1
+kind: sdkwork.docs.index
+repository: sdkwork-__APP_CODE__
+canon:
+  prd: docs/product/prd/PRD.md
+  techArchitecture: docs/architecture/tech/TECH_ARCHITECTURE.md
+entries: []
+domains:
+  - name: __APP_DOMAIN__
+    path: docs/domains/__APP_DOMAIN__/
+    owner: __APP_OWNER__

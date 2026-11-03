@@ -292,7 +292,7 @@ private fun MeScreen(components: List<IntegratedComponent>, modifier: Modifier =
                         Spacer(Modifier.width(14.dp))
                         Column(Modifier.weight(1f)) {
                             Text(
-                                text = if (iamLinked) "IAM session ready" else "IAM is not selected",
+                                text = if (iamLinked) "IAM integration ready" else "IAM is not selected",
                                 color = Ink,
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.SemiBold,

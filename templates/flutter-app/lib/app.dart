@@ -364,7 +364,7 @@ class _FoundationHomePageState extends State<FoundationHomePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          iamLinked ? 'IAM session ready' : 'IAM is not selected',
+                          iamLinked ? 'IAM integration ready' : 'IAM is not selected',
                           style: theme.textTheme.titleMedium?.copyWith(
                             color: kInk,
                             fontWeight: FontWeight.w600,

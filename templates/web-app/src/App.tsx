@@ -222,7 +222,7 @@ export default function App() {
             <div className="scaffold-account-identity">
               <span className="scaffold-account-avatar" aria-hidden="true">__APP_INITIALS__</span>
               <div>
-                <strong>{iamLinked ? 'IAM session ready' : 'IAM is not selected'}</strong>
+                <strong>{iamLinked ? 'IAM integration ready' : 'IAM is not selected'}</strong>
                 <p>
                   {iamLinked
                     ? 'Connect the IAM runtime with a base URL and the global token manager to load the signed-in profile.'

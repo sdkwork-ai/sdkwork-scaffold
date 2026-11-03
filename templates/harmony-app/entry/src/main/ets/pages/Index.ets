@@ -242,7 +242,7 @@ struct Index {
 
             Column({ space: 4 }) {
               Text(this.components.some((component: IntegratedComponent) => component.id === 'iam' && component.supported)
-                ? 'IAM session ready'
+                ? 'IAM integration ready'
                 : 'IAM is not selected')
                 .fontSize(15)
                 .fontWeight(FontWeight.Medium)

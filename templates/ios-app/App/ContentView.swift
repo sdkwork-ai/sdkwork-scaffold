@@ -235,7 +235,7 @@ private struct MeTab: View {
                             .clipShape(RoundedRectangle(cornerRadius: 16))
 
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(iamLinked ? "IAM session ready" : "IAM is not selected")
+                            Text(iamLinked ? "IAM integration ready" : "IAM is not selected")
                                 .font(.headline)
                                 .foregroundStyle(Palette.ink)
                             Text(iamLinked

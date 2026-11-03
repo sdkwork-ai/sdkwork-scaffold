@@ -102,7 +102,7 @@
       <view class="account-identity">
         <text class="account-avatar">__APP_INITIALS__</text>
         <view class="account-copy">
-          <text class="row-title">{{iamLinked ? 'IAM session ready' : 'IAM is not selected'}}</text>
+          <text class="row-title">{{iamLinked ? 'IAM integration ready' : 'IAM is not selected'}}</text>
           <text class="row-detail">{{iamLinked ? 'Connect the IAM runtime with a base URL and the global token manager to load the signed-in profile.' : 'Select the iam component to enable account, session, and security capabilities.'}}</text>
         </view>
         <text class="badge {{iamLinked ? 'ok' : 'warn'}}">{{iamLinked ? 'Linked' : 'Plan'}}</text>

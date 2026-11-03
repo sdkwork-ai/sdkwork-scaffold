@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "kind": "sdkwork.component.spec",
+  "component": {
+    "name": "__APP_PACKAGE_NAME__",
+    "displayName": "__APP_NAME__ Mini Program",
+    "version": "0.1.0",
+    "type": "mini-program-app",
+    "root": "__APP_ROOT_REL__",
+    "domain": "__APP_DOMAIN__",
+    "capability": "__APP_CODE__",
+    "surface": "app",
+    "languages": ["typescript"],
+    "generated": false,
+    "manifests": ["package.json", "project.config.json"]
+  },
+  "canonicalSpecs": [
+    {
+      "file": "APPLICATION_SPEC.md",
+      "path": "__SPECS_REL_FROM_APP__/APPLICATION_SPEC.md",
+      "purpose": "Application composition boundaries."
+    },
+    {
+      "file": "__SURFACE_ARCHITECTURE_SPEC__",
+      "path": "__SPECS_REL_FROM_APP__/__SURFACE_ARCHITECTURE_SPEC__",
+      "purpose": "Mini-program application root architecture."
+    },
+    {
+      "file": "__SURFACE_UI_SPEC__",
+      "path": "__SPECS_REL_FROM_APP__/__SURFACE_UI_SPEC__",
+      "purpose": "Mini-program UI package rules."
+    },
+    {
+      "file": "CODE_STYLE_SPEC.md",
+      "path": "__SPECS_REL_FROM_APP__/CODE_STYLE_SPEC.md",
+      "purpose": "Authored code structure."
+    },
+    {
+      "file": "NAMING_SPEC.md",
+      "path": "__SPECS_REL_FROM_APP__/NAMING_SPEC.md",
+      "purpose": "Canonical naming."
+    },
+    {
+      "file": "TYPESCRIPT_CODE_SPEC.md",
+      "path": "__SPECS_REL_FROM_APP__/TYPESCRIPT_CODE_SPEC.md",
+      "purpose": "TypeScript source rules."
+    }
+  ],
+  "contracts": {
+    "layerRole": "runtime-composition",
+    "publicExports": ["."],
+    "providedPorts": [],
+    "requiredPorts": [],
+    "runtimeEntrypoints": ["src/app.ts"],
+    "routeManifest": null,
+    "sdkClients": [],
+    "sdkDependencies": [],
+    "permissionComposition": {},
+    "dependencyApiExports": [],
+    "dependencyApiSurfaces": [],
+    "events": [],
+    "configKeys": ["project.config.json", "config/components"]
+  },
+  "verification": {
+    "commands": ["pnpm --dir __APP_ROOT_REL__ typecheck"]
+  }
+}

@@ -4,12 +4,13 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import {
-  DEFAULT_SURFACES,
+  ARCHITECTURES,
   SCAFFOLD_VERSION,
   TEMPLATE_GROUPS,
-  WEB_SURFACES,
 } from '../scaffold.config.mjs';
+import { COMPONENTS } from '../components.config.mjs';
 import { USAGE, parseScaffoldArguments } from '../lib/arguments.mjs';
+import { componentCatalogForList } from '../lib/components.mjs';
 import {
   createVariables,
   findSpecsDirectory,
@@ -25,20 +26,38 @@ function printList() {
   console.log('');
   console.log('Template groups:');
   for (const group of TEMPLATE_GROUPS) {
-    console.log(`- ${group.id}: ${group.description}`);
+    const architectures = group.architectures ? ` [${group.architectures.join(', ')}]` : '';
+    console.log(`- ${group.id}${architectures}: ${group.description}`);
   }
   console.log('');
-  console.log(`Web surfaces: ${Object.keys(WEB_SURFACES).join(', ')} (default: ${DEFAULT_SURFACES.join(', ')})`);
+  console.log(`Architectures: ${Object.keys(ARCHITECTURES).join(', ')}`);
+}
+
+function printArchitectures() {
+  console.log('SDKWork scaffold architectures');
+  console.log('');
+  for (const architecture of Object.values(ARCHITECTURES)) {
+    console.log(`- ${architecture.id}: ${architecture.title} (${architecture.kind}) -> apps/sdkwork-<code>-${architecture.suffix}`);
+    console.log(`  ${architecture.description}`);
+    console.log(`  runtime: ${architecture.runtime.family}/${architecture.runtime.framework}; platform: ${architecture.runtime.defaultPlatform}`);
+  }
+}
+
+function printComponents(workspace) {
+  const catalog = componentCatalogForList(workspace);
+  console.log('SDKWork common component catalog');
+  console.log('');
+  console.log('| Id | Component | Category | Kind | SDK family | Default | Languages |');
+  console.log('| --- | --- | --- | --- | --- | --- | --- |');
+  for (const row of catalog) {
+    console.log(`| ${row.id} | ${row.title} | ${row.category} | ${row.kind} | ${row.sdkFamily ?? '—'} | ${row.defaultEnabled ? 'yes' : 'no'} | ${row.languages.join(', ')} |`);
+  }
 }
 
 function printPlan(plan) {
   console.log('Generation plan:');
   for (const entry of plan) {
-    if (entry.warning) {
-      console.log(`! ${entry.warning}`);
-      continue;
-    }
-    console.log(`- ${entry.group}${entry.surface ? ` [${entry.surface}]` : ''} -> ${entry.target}`);
+    console.log(`- ${entry.group}${entry.architecture ? ` [${entry.architecture}]` : ''} -> ${entry.target}`);
   }
 }
 
@@ -52,19 +71,30 @@ function main() {
     process.exit(2);
   }
 
-  if (options.help || options.list || options.selfCheck) {
-    if (options.selfCheck) {
-      const result = selfCheck(SCAFFOLD_ROOT);
-      if (!result.ok) {
-        console.error(`Scaffold self-check failed (${result.issues.length} issue(s)):`);
-        for (const issue of result.issues) console.error(`- ${issue}`);
-        process.exit(1);
-      }
-      console.log(`Scaffold self-check passed (${TEMPLATE_GROUPS.length} template groups)`);
-      return;
+  if (options.help) {
+    console.log(USAGE);
+    return;
+  }
+  if (options.list) {
+    printList();
+    return;
+  }
+  if (options.listArchitectures) {
+    printArchitectures();
+    return;
+  }
+  if (options.listComponents) {
+    printComponents(path.dirname(SCAFFOLD_ROOT));
+    return;
+  }
+  if (options.selfCheck) {
+    const result = selfCheck(SCAFFOLD_ROOT);
+    if (!result.ok) {
+      console.error(`Scaffold self-check failed (${result.issues.length} issue(s)):`);
+      for (const issue of result.issues) console.error(`- ${issue}`);
+      process.exit(1);
     }
-    if (options.list) printList();
-    else console.log(USAGE);
+    console.log(`Scaffold self-check passed (${TEMPLATE_GROUPS.length} template groups, ${Object.keys(ARCHITECTURES).length} architectures)`);
     return;
   }
 
@@ -79,13 +109,15 @@ function main() {
       options,
       specsDirectory,
       generatedAt: new Date().toISOString(),
+      components: [],
     });
     console.log(`Dry run for sdkwork-${options.code} at ${options.target}`);
     console.log(`specs: ${specsDirectory ?? '(not found; using ../sdkwork-specs)'}`);
     console.log(`variables: APP_CODE=${variables.APP_CODE}, APP_TYPE=${variables.APP_TYPE}, SPECS_REL=${variables.SPECS_REL}`);
-    console.log(`surfaces: ${options.surfaces.join(', ')}`);
+    console.log(`architectures: ${options.architectures.join(', ')}`);
+    console.log(`components: ${options.components.map((component) => component.id).join(', ') || '(none)'}`);
     console.log('');
-    printPlan(planGeneration({ options, scaffoldRoot: SCAFFOLD_ROOT, specsDirectory }));
+    printPlan(planGeneration({ options, scaffoldRoot: SCAFFOLD_ROOT }));
     return;
   }
 
@@ -103,7 +135,8 @@ function main() {
 
   console.log(`Generated sdkwork-${options.code} at ${result.target}`);
   console.log(`Files written: ${result.written.length}`);
-  console.log(`Surfaces: ${options.surfaces.join(', ')}`);
+  console.log(`Architectures: ${options.architectures.join(', ')}`);
+  console.log(`Components: ${result.components.map((component) => component.id).join(', ') || '(none)'}`);
   if (result.post.git) {
     console.log(`git: ${result.post.git.initialized ? 'initialized on main' : result.post.git.reason}`);
   }

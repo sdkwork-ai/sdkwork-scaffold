@@ -6,7 +6,7 @@ Source-controlled deployment and runtime profiles for `sdkwork-__APP_CODE__`.
 
 ## Current State
 
-The scaffold initializes browser surfaces only. Add typed topology profiles here when an API runtime, database, or deployable service is introduced:
+The scaffold initializes client surfaces only. Add typed topology profiles here when an API runtime, database, or deployable service is introduced:
 
 - `etc/topology/standalone.development.env`
 - `etc/topology/cloud.development.env`

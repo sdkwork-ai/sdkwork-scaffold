@@ -1,0 +1,25 @@
+name: __DART_PACKAGE_NAME__
+description: __APP_DESCRIPTION__
+publish_to: none
+version: 0.1.0+1
+
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+  flutter: ">=3.24.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+dependency_overrides:
+  sdkwork_common_flutter:
+    path: __FLUTTER_COMMON_REL__
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true

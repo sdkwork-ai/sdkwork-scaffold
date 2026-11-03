@@ -26,6 +26,8 @@ __APP_ROOT_REL__/
 
 `src/` is the shell composition boundary. Add business pages, services, state, and workflow components under `packages/` when the first workflow is implemented. Do not grow business behavior in `App.tsx`.
 
+`src/composition/components.ts` is the generated component registry. `src/composition/sdkClients.ts` constructs the selected TypeScript app SDK clients with one shared base URL and token manager. Per-component settings live in `config/components/<id>.json`.
+
 ## Commands
 
 ```bash
@@ -40,8 +42,9 @@ pnpm dev        # from the repository root; starts every selected surface
 
 ## Boundaries
 
-- Do not import the other browser surface's UI.
-- Do not build raw HTTP calls or manual auth headers; consume generated SDKs through service ports once APIs exist.
+- Do not import another architecture's UI or host implementation.
+- Do not build raw HTTP calls or manual auth headers; consume generated SDKs through `src/composition/sdkClients.ts` and service ports.
+- Do not add a second SDK inventory outside the generated composition registry.
 - Generated SDK output stays under `sdks/`; never hand-edit it.
 - Keep `specs/component.spec.json` aligned with public exports, ports, and runtime entrypoints.
 

@@ -1,0 +1,17 @@
+{
+  "name": "__APP_PACKAGE_NAME__",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Flutter mobile surface for __APP_NAME__.",
+  "scripts": {
+    "analyze": "flutter analyze",
+    "test": "flutter test",
+    "pub:get": "flutter pub get"
+  },
+  "sdkwork": {
+    "kind": "flutter",
+    "architecture": "flutter",
+    "componentType": "__SURFACE_COMPONENT_TYPE__",
+    "architectureSpec": "__SURFACE_ARCHITECTURE_SPEC__"
+  }
+}

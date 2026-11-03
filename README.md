@@ -4,61 +4,153 @@ repository-kind: standards
 
 Composable repository and application scaffold for SDKWork projects.
 
-`sdkwork-scaffold` turns a single command into a standards-aligned repository baseline plus one or more application surface shells. The generator is intentionally data-driven: template groups and web surfaces are registered in `scaffold.config.mjs`, so a new architecture is a template directory and a registry entry rather than a fork of the CLI.
+`sdkwork-scaffold` turns one command into a standards-aligned repository baseline, one or more architecture-specific application roots, and a resolved common-component composition. Architecture and component selection are data-driven registries, not CLI forks.
 
 ## Quick Start
 
-From `sdkwork-space`:
+Full browser application with IAM and appbase:
 
 ```bash
+cd D:\sdkwork-space
 node sdkwork-scaffold/bin/sdkwork-scaffold.mjs \
   --code recruitment \
   --name "SDKWork Recruitment" \
   --domain recruitment \
-  --owner sdkwork-platform \
+  --architectures pc,h5 \
+  --components iam,appbase \
   --target sdkwork-recruitment
 ```
 
-The command:
+A native-only project:
 
-1. validates the application code and target;
-2. renders the repository template group;
-3. renders one web application template group per selected surface (`pc,h5` by default);
-4. writes `.sdkwork/scaffold.json` provenance;
-5. runs the optional `sdkwork-specs` bootstraps and AGENTS managed-block syncs when `sdkwork-specs` is available;
-6. initializes git on `main` and runs `pnpm install` unless disabled;
-7. verifies the generated repository contract.
-
-Use `--no-install` for a fast generation-only run, `--no-git` to skip repository initialization, or `--dry-run` to inspect the plan.
-
-## Command Surface
-
-```text
-node bin/sdkwork-scaffold.mjs --code <code> --target <directory> [options]
-node bin/sdkwork-scaffold.mjs --list
-node bin/sdkwork-scaffold.mjs --self-check
+```bash
+node sdkwork-scaffold/bin/sdkwork-scaffold.mjs \
+  --code field-app \
+  --architectures ios \
+  --components iam,im \
+  --target sdkwork-field-app
 ```
 
-Options:
+A multi-surface project with the common component set:
 
-| Option | Default | Purpose |
-| --- | --- | --- |
-| `--code` | required | Lower kebab-case application code. |
-| `--target` | required | Empty directory to initialize. |
-| `--name` | title-cased code | Human display name. |
-| `--owner` | `sdkwork-platform` | Owning team. |
-| `--domain` | application code | Canonical domain. |
-| `--description` | generated sentence | One-sentence product description. |
-| `--app-type` | `APP_REACT` | SDKWork app type. |
-| `--surfaces` | `pc,h5` | Web surfaces to generate. |
-| `--specs` | sibling `sdkwork-specs` | Canonical standards checkout. |
-| `--site-url` | `https://sdkwork.com/apps/sdkwork-<code>` | Public app website. |
-| `--no-git` | git enabled | Skip `git init -b main`. |
-| `--no-install` | install enabled | Skip `pnpm install`. |
-| `--dry-run` | off | Print the plan without writing. |
-| `--force` | off | Regenerate a directory carrying `.sdkwork/scaffold.json`. |
+```bash
+node sdkwork-scaffold/bin/sdkwork-scaffold.mjs \
+  --code recruitment \
+  --architectures pc,h5,pad,ios,android,harmony,flutter,mini-program \
+  --components iam,appbase,rtc,im,agents,order,drive \
+  --target sdkwork-recruitment
+```
 
-`--force` refuses a directory without the scaffold marker. It never treats an arbitrary non-empty directory as a template target.
+## Architecture Registry
+
+| Id | Root | Template | Runtime |
+| --- | --- | --- | --- |
+| `pc` | `apps/sdkwork-<code>-pc` | React/Vite | web / react |
+| `h5` | `apps/sdkwork-<code>-h5` | React/Vite | web / react |
+| `pad` | `apps/sdkwork-<code>-pad` | React/Vite | web / react |
+| `ios` | `apps/sdkwork-<code>-ios-mobile` | SwiftUI + SPM | mobile / ios-native |
+| `android` | `apps/sdkwork-<code>-android-mobile` | Kotlin + Compose | mobile / android-native |
+| `harmony` | `apps/sdkwork-<code>-harmony-mobile` | ArkTS + ArkUI | mobile / harmony-native |
+| `flutter` | `apps/sdkwork-<code>-flutter-mobile` | Flutter | mobile / flutter |
+| `mini-program` | `apps/sdkwork-<code>-mini-program` | TypeScript + WXML | mini-program / weixin |
+
+Select one or many:
+
+```bash
+--architectures pc
+--architectures pc,h5,pad
+--architectures ios
+--architectures pc,h5,flutter,mini-program
+```
+
+`--surfaces` remains a backward-compatible alias.
+
+## Component Registry
+
+The catalog contains foundations, communication, commerce, content, AI, and platform capabilities. Run `--list-components` for live availability from the sibling repositories.
+
+Foundation and runtime:
+
+- `iam` — login, session, current user, tenant/organization, token lifecycle.
+- `appbase` — application foundation, runtime bootstrap, error recovery, feature registry.
+
+Communication:
+
+- `rtc` — realtime audio/video rooms and calls.
+- `im` — conversations, messages, contacts, presence.
+- `mail` — mailboxes and message threads.
+- `messaging` — notification templates, channels, dispatch.
+
+Commerce:
+
+- `order` — orders, checkout, payments, recharges, after-sales, fulfillment.
+- `payment` — payment intents, channels, refunds.
+- `commerce` — products, SKUs, cart, pricing, inventory.
+- `catalog` — categories, taxonomy, dictionaries.
+- `membership` — plans, entitlements, subscriptions.
+- `promotion` — coupons, campaigns, discounts.
+
+Content and productivity:
+
+- `drive` — storage, upload sessions, media resources.
+- `community`, `comments`, `feeds`, `news` — social and editorial capabilities.
+- `documents`, `notes`, `assets`, `course`, `music`, `audio` — content capabilities.
+- `search` — cross-domain search.
+
+AI:
+
+- `agents`, `image`, `knowledgebase`, `memory`, `voice`, `generations`, `prompts`, `models`, `skills`.
+
+Platform:
+
+- `notary`, `aiot`.
+
+Selection:
+
+```bash
+--components iam,appbase,rtc,im,agents,order
+--all-components
+--components none
+```
+
+Every component is resolved from its sibling repository `sdks/<family>/sdk-manifest.json`. The generator does not hardcode package paths:
+
+- TypeScript web/pad/mini roots get real SDK package dependencies.
+- Flutter roots get Dart/Flutter path dependencies when the package is usable.
+- iOS/Android/HarmonyOS roots get a generated component registry plus the resolved SDK integration plan.
+- Unsupported or incomplete dependencies are recorded as `Plan` instead of generating broken imports.
+- `specs/components.selected.json` is the machine selection and resolution authority.
+- `config/components/<id>.json` is the per-component runtime configuration.
+
+### Configure Components
+
+```bash
+--component-config ./components.json
+```
+
+```json
+{
+  "components": {
+    "iam": {
+      "enabled": true,
+      "permissions": ["iam.session.read"],
+      "config": {
+        "loginMode": "embedded",
+        "sessionPersistence": "secure-storage"
+      }
+    },
+    "rtc": {
+      "enabled": true,
+      "config": { "region": "cn", "media": "audio-video" }
+    },
+    "order": {
+      "enabled": false
+    }
+  }
+}
+```
+
+`enabled: false` removes a component. Component config never stores credentials; secrets stay in runtime secret storage or the global token manager.
 
 ## Generated Layout
 
@@ -68,21 +160,20 @@ sdkwork-<code>/
   apis/                      API contract authoring inputs
   apps/
     README.md
-    sdkwork-<code>-pc/       PC React/Vite surface
-    sdkwork-<code>-h5/       H5 React/Vite surface
+    sdkwork-<code>-<arch>/    one root per selected architecture
   assets/                    governed app media scaffold
+  config/components/         root component configuration view
   crates/                    Rust backend placement
   deployments/               deployment descriptors
-  docs/                      Canon PRD and technical architecture
+  docs/
+    components/              per-component integration records
   etc/                       source-controlled deployment/runtime profiles
-  examples/                  runnable examples
-  jobs/                      schedules and batch descriptors
-  plugins/                   shipped product plugins
+  specs/
+    components.selected.json machine component/SDK resolution
+    component.spec.json
   scripts/                   thin command entrypoints
   sdks/                      SDK family workspace
-  specs/                     repository/application contracts
   tests/                     contract verification
-  tools/                     reusable tooling
   AGENTS.md
   CLAUDE.md / CODEX.md / GEMINI.md
   agent.app.config.json
@@ -91,7 +182,9 @@ sdkwork-<code>/
   tsconfig.base.json
 ```
 
-The generated root exposes the standard pnpm lifecycle:
+Browser/tablet roots are buildable with Vite. Flutter, iOS, Android, HarmonyOS, and mini-program roots carry their native manifests and toolchain instructions. Native SDK packages are recorded in each root's `specs/integration.plan.json` and component registry.
+
+## Standard Commands
 
 ```bash
 pnpm dev
@@ -105,90 +198,83 @@ pnpm verify
 pnpm clean
 ```
 
-`pnpm build` produces `apps/*/dist/<deployment-profile>/<environment>/`.
+Behavior:
 
-## Extending The Scaffold
+- `dev` starts selected `web` roots only.
+- `build` builds `web` roots and typechecks mini-program; Flutter/native roots report that their platform toolchain owns the build.
+- `check` typechecks web/mini roots, runs `flutter analyze` when Flutter exists, and runs the SDKWork standards gates.
+- `verify` runs check + contract tests + build.
+- `clean` removes only enumerated web build output.
 
-### Add a web surface
+## Template Framework
 
-1. Add a descriptor to `WEB_SURFACES` in `scaffold.config.mjs` (`id`, `title`, `devPort`, `componentType`, architecture and UI specs).
-2. Reuse `templates/web-app/` when the surface is React/Vite, or add a new template group.
-3. Add the surface to `DEFAULT_SURFACES` only if every new project should receive it.
-4. Cover it in `tests/scaffold.test.mjs`.
+`scaffold.config.mjs` owns architecture and template-group registration. `components.config.mjs` owns the common-component catalog.
 
-### Add a new template group
+Add an architecture:
 
-Add an entry to `TEMPLATE_GROUPS`:
+1. Add an `ARCHITECTURES` descriptor (`suffix`, `template`, `kind`, runtime metadata, specs).
+2. Add a `TEMPLATE_GROUPS` entry for its template directory.
+3. Add a template under `templates/<name>/`.
+4. Add the root file expectations to `lib/verify.mjs`.
+5. Cover it in `tests/scaffold.test.mjs`; every architecture is generated independently in the test matrix.
 
-```js
-{
-  id: 'rust-service',
-  template: 'rust-service',
-  target: 'crates/sdkwork-__APP_CODE__-service',
-  description: 'Rust service foundation.',
-}
-```
+Add a component:
 
-For a per-surface group, set `perSurface: true` and use `__SURFACE__` in the target path. The renderer copies every file under `templates/<template>/`, substitutes `__TOKEN__` variables in both paths and contents, and rejects unresolved tokens.
+1. Add a `COMPONENTS` entry with `repo` and `sdkFamily` (or `kind: "runtime"` plus `runtimePackages`).
+2. Do not hardcode SDK package paths; `sdk-manifest.json` resolves them.
+3. Add its category, default config, and permission module id.
+4. Re-run `--list-components` and the test matrix.
 
-### Template variables
+Template variables include:
 
 | Variable | Meaning |
 | --- | --- |
-| `__APP_CODE__` | Application code. |
-| `__APP_NAME__` | Display name. |
-| `__APP_OWNER__` | Owning team. |
-| `__APP_DOMAIN__` | Domain. |
-| `__APP_DESCRIPTION__` | Description. |
-| `__APP_TYPE__` | SDKWork app type. |
-| `__APP_IDENTIFIER__` | Dotted package/bundle identifier. |
-| `__APP_SITE_URL__` | Public app website. |
-| `__APP_INITIALS__` | Brand initials. |
-| `__GENERATED_AT__`, `__GENERATED_DATE__` | Generation timestamp/date. |
-| `__GENERATOR_VERSION__` | Scaffold version. |
-| `__SPECS_REL__` | Relative path from the repository root to `sdkwork-specs`. |
-| `__SPECS_TOOLS_REL__` | Relative path to `sdkwork-specs/tools`. |
-| `__SURFACE__`, `__SURFACE_TITLE__`, `__SURFACE_PORT__` | Current web surface. |
-| `__APP_ROOT_REL__`, `__APP_PACKAGE_NAME__` | Current surface root and package name. |
-| `__SPECS_REL_FROM_APP__` | Relative path from the surface root to `sdkwork-specs`. |
-| `__SURFACE_ARCHITECTURE_SPEC__`, `__SURFACE_UI_SPEC__` | Surface standards. |
-| `__SURFACE_COMPONENT_TYPE__` | Component type for the surface. |
-| `__SURFACE_LIST_JSON__` | Selected surfaces as a JSON array. |
-| `__APP_SURFACE_TABLE__` | Markdown table rows for selected surfaces. |
-
-Variables are defined in `lib/generator.mjs`; self-check renders every template for every registered surface, so an unknown or unresolved token fails CI.
+| `__APP_CODE__`, `__APP_NAME__`, `__APP_DOMAIN__` | Application identity |
+| `__ARCHITECTURES__`, `__ARCHITECTURE_TABLE__` | Selected architecture set |
+| `__PRIMARY_ARCHITECTURE__`, `__RUNTIME_*__` | App manifest runtime projection |
+| `__COMPONENT_IDS__`, `__COMPONENT_COUNT__` | Selected components |
+| `__ARCHITECTURE_ROOTS_JSON__` | Machine architecture root map |
+| `__SPECS_REL__`, `__SPECS_TOOLS_REL__` | Canonical standards paths |
+| `__SURFACE__`, `__ARCH_KIND__`, `__SURFACE_PORT__` | Current architecture |
+| `__APP_ROOT_REL__`, `__APP_PACKAGE_NAME__` | Current app root/package |
+| `__DART_PACKAGE_NAME__`, `__ANDROID_NAMESPACE__`, `__IOS_MODULE_NAME__`, `__HARMONY_BUNDLE_NAME__` | Native identifiers |
 
 ## Verification
 
 ```bash
-pnpm test
 pnpm check
 ```
 
-The local checks cover argument validation, template self-check, generation to a temporary directory, refusal to overwrite arbitrary directories, subset surface generation, and generated repository contract checks.
+The scaffold tests cover:
 
-When a `sdkwork-specs` sibling exists, the generated project also carries the tool-owned AGENTS managed blocks and the canonical app-assets scaffold.
+- argument parsing and configuration
+- template self-check for all 7 template groups and 8 architectures
+- PC/H5 linked component generation
+- every architecture generated independently
+- web subsets and component overrides
+- native unsupported-language degradation
+- target and `--force` safety
+- unresolved template tokens
+
+Generated projects additionally run their own `pnpm check`, contract tests, and web builds. Native toolchain builds remain the responsibility of Xcode, Android Gradle, hvigor, Flutter, and WeChat DevTools.
 
 ## Design Rules
 
 - Standard project-root dictionary only; no repository-root `packages/`, `src/`, or `config/`.
-- PC and H5 are separate architecture roots with one package each.
-- Generated output is scaffold-owned until regeneration; `--force` is guarded by a marker.
-- No fabricated media, credentials, runtime state, or environment values.
+- Each architecture is an independent app root with its own component spec and `.sdkwork/`.
+- Component SDK paths come from sibling `sdk-manifest.json`; never copy generated transport.
+- Component dependencies are linked only when the package is actually usable; otherwise the plan is recorded.
+- No fabricated screenshots, credentials, runtime state, or environment values.
 - Template paths are relative and may not escape the target directory.
 - The scaffold never copies global standard bodies into generated repositories; it links them by relative path.
 
-## Current Scope
+## Current Boundaries
 
-The scaffold currently generates:
-
-- repository/application baseline;
-- Canon documentation;
-- PC and H5 React/Vite shells;
-- standard pnpm lifecycle;
-- local contract verification.
-
-It does not generate a product workflow, backend runtime, database module, generated SDK family, or release workflow. Those are added after a validated requirement and architecture decision so the scaffold does not pre-commit a product to an unnecessary runtime shape.
+- Browser/tablet roots have runnable builds.
+- Flutter roots have runnable `flutter analyze`/`flutter test` when the Flutter SDK is installed.
+- Mini-program roots have TypeScript source and `tsc --noEmit`; projection/build is platform tooling.
+- iOS/Android/HarmonyOS roots are source-complete shells with manifests and component integration plans; Xcode/Gradle/hvigor builds require their toolchains.
+- Native SDK package-manager wiring and signed release packaging remain platform follow-ups.
 
 ## Canonical Standards
 
@@ -197,4 +283,6 @@ It does not generate a product workflow, backend runtime, database module, gener
 - [Repository baseline](../sdkwork-specs/REPOSITORY_BASELINE_SPEC.md)
 - [pnpm script standard](../sdkwork-specs/PNPM_SCRIPT_SPEC.md)
 - [Application standard](../sdkwork-specs/APPLICATION_SPEC.md)
+- [App composition](../sdkwork-specs/APP_COMPOSITION_SPEC.md)
+- [App SDK integration](../sdkwork-specs/APP_SDK_INTEGRATION_SPEC.md)
 - [Component specs](../sdkwork-specs/COMPONENT_SPEC.md)

@@ -1,3 +1,5 @@
+import { integratedComponents } from './composition/components';
+
 const surface = '__SURFACE__';
 const surfaceTitle = '__SURFACE_TITLE__';
 const deploymentProfile = import.meta.env.VITE_SDKWORK_DEPLOYMENT_PROFILE
@@ -91,6 +93,34 @@ export default function App() {
               </article>
             ))}
           </div>
+        </section>
+
+        <section className="components" aria-labelledby="components-title">
+          <div className="section-heading">
+            <p className="eyebrow">Composition</p>
+            <h2 id="components-title">Shared capabilities, resolved per surface.</h2>
+          </div>
+          {integratedComponents.length === 0 ? (
+            <p className="empty-state">No common component is enabled for this application.</p>
+          ) : (
+            <div className="component-grid">
+              {integratedComponents.map((component) => (
+                <article className="component-card" key={component.id}>
+                  <div className="component-heading">
+                    <span className="component-mark" aria-hidden="true">
+                      {component.id.slice(0, 2).toUpperCase()}
+                    </span>
+                    <span className={`component-state ${component.supported ? 'ready' : 'planned'}`}>
+                      {component.supported ? 'Linked' : 'Plan'}
+                    </span>
+                  </div>
+                  <h3>{component.title}</h3>
+                  <p>{component.description}</p>
+                  <code>{component.sdkPackage ?? `${component.repo} runtime`}</code>
+                </article>
+              ))}
+            </div>
+          )}
         </section>
 
         <section className="next" aria-labelledby="next-title">

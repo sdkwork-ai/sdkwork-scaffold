@@ -6,6 +6,7 @@ Canon documentation for `sdkwork-__APP_CODE__`.
 
 - [Product PRD](product/prd/PRD.md)
 - [Technical architecture](architecture/tech/TECH_ARCHITECTURE.md)
+- [Component integration](components/README.md)
 - [Documentation index](INDEX.yaml)
 
 ## Layout

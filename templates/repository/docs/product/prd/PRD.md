@@ -20,7 +20,7 @@ Identify the primary users, their context, and the jobs they need to complete.
 
 ## 3. Goals And Non-Goals
 
-- Goal: deliver a focused `__APP_DOMAIN__` capability through the PC and H5 surfaces selected at generation time.
+- Goal: deliver a focused `__APP_DOMAIN__` capability through the architectures selected at generation time.
 - Non-goal: add unrelated domains, speculative integrations, or backend APIs before a validated requirement exists.
 
 ## 4. Scope
@@ -28,7 +28,7 @@ Identify the primary users, their context, and the jobs they need to complete.
 Initial scaffold scope:
 
 - Repository baseline, Canon documentation, and application identity.
-- __SELECTED_SURFACES__ browser surface shells.
+- __ARCHITECTURES__ architecture shells.
 - Standard local command surface and verification.
 
 Product scope is captured in requirements before implementation.

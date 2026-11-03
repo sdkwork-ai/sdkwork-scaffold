@@ -1,0 +1,13 @@
+{
+  "modelVersion": "5.0.0",
+  "name": "__APP_PACKAGE_NAME__",
+  "version": "0.1.0",
+  "description": "__APP_DESCRIPTION__",
+  "main": "",
+  "author": "SDKWork",
+  "license": "Apache-2.0",
+  "dependencies": {},
+  "devDependencies": {
+    "@ohos/hypium": "1.0.19"
+  }
+}

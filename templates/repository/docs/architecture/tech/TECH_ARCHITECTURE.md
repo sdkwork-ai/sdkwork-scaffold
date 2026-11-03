@@ -11,19 +11,20 @@ Specs: ARCHITECTURE_DECISION_SPEC.md, DOCUMENTATION_SPEC.md
 
 ## 1. Architecture Overview
 
-`sdkwork-__APP_CODE__` is initialized as an SDKWork application with __APP_SURFACE_COUNT__ browser surface(s): __SELECTED_SURFACES__.
+`sdkwork-__APP_CODE__` is initialized as an SDKWork application with __ARCHITECTURE_COUNT__ architecture root(s): __ARCHITECTURES__.
 
-The app shells are thin React/Vite composition roots. Business behavior, service ports, generated SDK clients, and route contributions are added later under the owning architecture standard.
+The app shells are thin composition roots. Business behavior, service ports, generated SDK clients, and route contributions are added later under the owning architecture standard. __COMPONENT_COUNT__ common component(s) are selected and resolved per architecture: __COMPONENT_IDS__.
 
 ## 2. Technology Choices
 
 | Concern | Choice |
 | --- | --- |
-| Language | TypeScript, strict mode |
-| UI | React 19 |
-| Build | Vite |
-| Package manager | pnpm workspace |
-| Browser surfaces | __SELECTED_SURFACES__ |
+| Languages | Per-architecture: TypeScript, Dart, Swift, Kotlin, ArkTS |
+| UI | React 19, Flutter, SwiftUI, Jetpack Compose, ArkUI, native mini-program |
+| Build | Vite, Flutter, Xcode, Gradle, hvigor, mini-program tooling |
+| Package manager | pnpm workspace plus native package managers |
+| Architectures | __ARCHITECTURES__ |
+| Components | __COMPONENT_IDS__ |
 | Local verification | `pnpm check`, `pnpm test`, `pnpm build` |
 
 ## 3. System Boundaries And Modules
@@ -38,11 +39,13 @@ The app shells are thin React/Vite composition roots. Business behavior, service
 
 ## 4. Directory And Package Layout
 
-__APP_SURFACE_TABLE__
+__ARCHITECTURE_TABLE__
 
 ## 5. API, SDK, And Data Ownership
 
-No API authority or generated SDK is owned at scaffold time. Before adding one:
+Selected common components are resolved from sibling `sdk-manifest.json` files. `specs/components.selected.json` records the resolved SDK package and path for each architecture. Web/tablet roots consume TypeScript app SDKs through `src/composition/sdkClients.ts`; Flutter roots use Dart/Flutter path dependencies; native roots carry a generated component registry and an SDK integration plan until their native package manager is wired.
+
+The application still owns no API authority at scaffold time. Product APIs and generated application SDKs are added after requirements are captured. Before adding one:
 
 1. Capture the requirement and architecture decision.
 2. Define the API contract under `apis/`.
@@ -63,7 +66,7 @@ Follow `__SPECS_REL__/SECURITY_SPEC.md`, `__SPECS_REL__/PRIVACY_SPEC.md`, and `_
 
 ## 7. Deployment And Runtime Topology
 
-The scaffold currently builds static browser artifacts under `apps/*/dist/<deployment-profile>/<environment>/`. No server runtime or container is defined. Add `specs/topology.spec.json`, `etc/topology/`, and deployment descriptors before introducing a deployable API runtime.
+The scaffold currently builds static web/tablet artifacts under `apps/*/dist/<deployment-profile>/<environment>/`; native roots are packaged by Xcode, Gradle, hvigor, Flutter, and WeChat tooling. No server runtime or container is defined. Add `specs/topology.spec.json`, `etc/topology/`, and deployment descriptors before introducing a deployable API runtime.
 
 Follow `__SPECS_REL__/APP_RUNTIME_TOPOLOGY_SPEC.md` and `__SPECS_REL__/DEPLOYMENT_SPEC.md`.
 

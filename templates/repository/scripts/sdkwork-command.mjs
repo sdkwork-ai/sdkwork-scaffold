@@ -56,7 +56,8 @@ function listApplications() {
       return {
         directory,
         name: manifest.name,
-        surface: manifest.sdkwork?.surface ?? entry.name.slice(APP_NAME_PREFIX.length),
+        kind: manifest.sdkwork?.kind ?? 'web',
+        surface: manifest.sdkwork?.surface ?? manifest.sdkwork?.architecture ?? entry.name.slice(APP_NAME_PREFIX.length),
         devPort: Number(manifest.sdkwork?.devPort ?? 4173),
       };
     })
@@ -111,14 +112,43 @@ function withApps(callback) {
   return status;
 }
 
+function commandExists(command) {
+  const result = spawnSync(command, ['--version'], {
+    stdio: 'ignore',
+    shell: process.platform === 'win32',
+  });
+  return !result.error && result.status === 0;
+}
+
 function typecheck(flags) {
   const env = runtimeEnvironment(flags, 'development');
-  return withApps((app) => runPnpm(['exec', 'tsc', '--noEmit'], app.directory, env));
+  return withApps((app) => {
+    if (app.kind === 'web' || app.kind === 'mini-program') {
+      return runPnpm(['exec', 'tsc', '--noEmit'], app.directory, env);
+    }
+    if (app.kind === 'flutter') {
+      if (!commandExists('flutter')) {
+        console.log(`skipped ${app.name}: flutter is not installed`);
+        return 0;
+      }
+      return run('flutter', ['analyze'], app.directory, env, process.platform === 'win32');
+    }
+    console.log(`skipped ${app.name}: native ${app.kind} uses its own toolchain`);
+    return 0;
+  });
 }
 
 function build(flags) {
   const env = runtimeEnvironment(flags, 'prod');
   return withApps((app) => {
+    if (app.kind === 'mini-program') {
+      console.log(`checked ${app.name}: mini-program TypeScript source`);
+      return runPnpm(['exec', 'tsc', '--noEmit'], app.directory, env);
+    }
+    if (app.kind !== 'web') {
+      console.log(`skipped ${app.name}: native ${app.kind} build is owned by its platform toolchain`);
+      return 0;
+    }
     const status = runPnpm(['exec', 'vite', 'build'], app.directory, env);
     if (status !== 0) return status;
     const output = path.join(
@@ -204,7 +234,9 @@ function safeRemove(target, label) {
 
 function clean() {
   for (const app of listApplications()) {
-    safeRemove(path.join(app.directory, 'dist'), `${app.name} build output`);
+    if (app.kind === 'web') {
+      safeRemove(path.join(app.directory, 'dist'), `${app.name} build output`);
+    }
   }
   safeRemove(SESSION_FILE, 'development session registry');
   console.log('cleaned enumerated build output');
@@ -255,9 +287,9 @@ function stop() {
 }
 
 function dev(flags) {
-  const apps = listApplications();
+  const apps = listApplications().filter((app) => app.kind === 'web');
   if (apps.length === 0) {
-    fail('no application surfaces found under apps/.');
+    fail('no web/tablet application surfaces found under apps/.');
     return 1;
   }
   const existing = readSession();

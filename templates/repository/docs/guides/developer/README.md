@@ -13,13 +13,13 @@ pnpm install
 pnpm dev
 ```
 
-`pnpm dev` starts the selected browser surfaces. `pnpm build` produces a static artifact per surface under `dist/standalone/prod`.
+`pnpm dev` starts the selected browser/tablet surfaces. `pnpm build` produces a static artifact per web root under `dist/standalone/prod`. Native iOS, Android, HarmonyOS, Flutter, and mini-program roots use their own toolchains.
 
 ## Standard Commands
 
 | Command | Purpose |
 | --- | --- |
-| `pnpm dev` | Start local browser surfaces. |
+| `pnpm dev` | Start local browser/tablet surfaces. |
 | `pnpm stop` | Stop only processes started by this repository. |
 | `pnpm check` | Typecheck and contract checks. |
 | `pnpm test` | Contract tests. |

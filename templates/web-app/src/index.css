@@ -347,6 +347,88 @@ code {
   text-transform: uppercase;
 }
 
+.components {
+  padding: 64px 0 20px;
+  border-top: 1px solid var(--line);
+}
+
+.component-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+  margin-top: 32px;
+}
+
+.component-card {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(12, 25, 20, 0.72);
+}
+
+.component-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.component-mark {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 1px solid rgba(184, 242, 107, 0.26);
+  border-radius: 10px;
+  color: var(--accent-strong);
+  font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+  font-size: 11px;
+}
+
+.component-state {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.component-state.ready {
+  color: var(--accent);
+}
+
+.component-state.planned {
+  color: #e6c67d;
+}
+
+.component-card h3 {
+  margin: 0;
+  font-size: 17px;
+  letter-spacing: -0.02em;
+}
+
+.component-card p {
+  min-height: 66px;
+  margin: 10px 0 16px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.component-card code {
+  display: block;
+  overflow: hidden;
+  color: var(--quiet);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.empty-state {
+  color: var(--muted);
+  font-size: 15px;
+}
+
 .next {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);

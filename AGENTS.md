@@ -16,9 +16,10 @@ This repository follows `../sdkwork-specs/README.md`. It is a tooling/standards 
 
 - `bin/` — CLI entrypoint.
 - `lib/` — argument parsing, variable creation, template rendering, generation, and verification.
-- `templates/` — repository and app-surface template groups.
+- `templates/` — repository and architecture-specific application template groups.
 - `tests/` — generator unit and integration tests.
-- `scaffold.config.mjs` — template and surface registry.
+- `scaffold.config.mjs` — architecture and template-group registry.
+- `components.config.mjs` — common-component catalog resolved from sibling SDK manifests.
 
 ## Spec Resolution Order
 
@@ -33,7 +34,8 @@ This repository follows `../sdkwork-specs/README.md`. It is a tooling/standards 
 | Task | Required specs |
 | --- | --- |
 | Generator code | `CODE_STYLE_SPEC.md`, `NAMING_SPEC.md`, `TYPESCRIPT_CODE_SPEC.md` |
-| Template change | the generated artifact's owning global spec (workspace, app manifest, PC/H5 architecture, component specs) |
+| Template change | the generated artifact's owning global spec (workspace, app manifest, selected architecture, component specs) |
+| Component catalog change | `APP_COMPOSITION_SPEC.md`, `APP_SDK_INTEGRATION_SPEC.md`, `COMPONENT_SPEC.md`, and the component repository's `sdk-manifest.json` |
 | Generated repository baseline | `SDKWORK_WORKSPACE_SPEC.md`, `REPOSITORY_BASELINE_SPEC.md`, `DOCUMENTATION_SPEC.md` |
 | Generated app surface | `APPLICATION_SPEC.md`, `APP_PC_ARCHITECTURE_SPEC.md` / `APP_H5_ARCHITECTURE_SPEC.md`, the matching UI spec |
 | Delete or overwrite | `DESTRUCTIVE_OPERATION_SPEC.md`, `CODE_STYLE_SPEC.md` §8 |

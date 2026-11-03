@@ -20,7 +20,9 @@ This repository owns the `__APP_CODE__` application in the `__APP_DOMAIN__` doma
 - `agent.app.config.json` — application identity and release declaration.
 - `.sdkwork/` — source-controlled local skills, plugins, and workspace metadata. Not runtime state.
 - `specs/` — repository/application contracts and, below each module, module-local `component.spec.json`.
-- `docs/` — Canon PRD and technical architecture.
+- `specs/components.selected.json` — selected common components and resolved SDK package/path per architecture.
+- `config/components/` — per-component runtime configuration. Change settings here, not in generated registries.
+- `docs/` — Canon PRD, technical architecture, and `docs/components/` integration records.
 - `apps/` — application surfaces. Each child is one architecture root.
 - `apis/` — authored API contracts and materialization inputs.
 - `sdks/` — SDK families and generated SDK output. Generated output is generator-owned.
@@ -55,7 +57,8 @@ Local files may narrow a task but may not contradict global standards.
 | App identity or release | `APP_MANIFEST_SPEC.md`, `CONFIG_SPEC.md`, `DEPLOYMENT_SPEC.md` |
 | Source config or environment profiles | `SOURCE_CONFIG_SPEC.md`, `CONFIG_SPEC.md`, `ENVIRONMENT_SPEC.md`, `DEPLOYMENT_SPEC.md` |
 | API work | `API_SPEC.md`, `WEB_FRAMEWORK_SPEC.md`, `WEB_BACKEND_SPEC.md`, `SDK_SPEC.md`, `TEST_SPEC.md` |
-| SDK generation or consumption | `SDK_SPEC.md`, `SDK_WORKSPACE_GENERATION_SPEC.md`, `API_SPEC.md` |
+| SDK generation or consumption | `SDK_SPEC.md`, `SDK_WORKSPACE_GENERATION_SPEC.md`, `API_SPEC.md`, `APP_SDK_INTEGRATION_SPEC.md` |
+| Component selection or configuration | `APP_COMPOSITION_SPEC.md`, `COMPONENT_SPEC.md`, `APP_SDK_INTEGRATION_SPEC.md`, `specs/components.selected.json` |
 | Build scripts or dev runners | `CODE_STYLE_SPEC.md` §7, `TYPESCRIPT_CODE_SPEC.md` §5, `PNPM_SCRIPT_SPEC.md` §11 |
 | Delete, move, overwrite, or reset | `DESTRUCTIVE_OPERATION_SPEC.md`, `CODE_STYLE_SPEC.md` §8 |
 | Repair or restore lost content | `ROLLBACK_RESTRICTION_SPEC.md`, `SOUL.md` §5.1 |

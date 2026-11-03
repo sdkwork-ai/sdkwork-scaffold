@@ -1,0 +1,16 @@
+{
+  "name": "__APP_PACKAGE_NAME__",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Native HarmonyOS surface for __APP_NAME__.",
+  "scripts": {
+    "build": "hvigorw assembleHap",
+    "test": "hvigorw test"
+  },
+  "sdkwork": {
+    "kind": "harmony",
+    "architecture": "harmony",
+    "componentType": "__SURFACE_COMPONENT_TYPE__",
+    "architectureSpec": "__SURFACE_ARCHITECTURE_SPEC__"
+  }
+}

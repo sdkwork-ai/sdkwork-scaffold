@@ -1,0 +1,7 @@
+{
+  "string": [
+    { "name": "module_desc", "value": "SDKWork application entry module" },
+    { "name": "EntryAbility_desc", "value": "SDKWork application entry" },
+    { "name": "EntryAbility_label", "value": "__APP_NAME__" }
+  ]
+}

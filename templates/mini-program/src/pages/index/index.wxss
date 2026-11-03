@@ -1,0 +1,87 @@
+.page {
+  min-height: 100vh;
+  padding: 48rpx 40rpx 80rpx;
+  box-sizing: border-box;
+  background: radial-gradient(circle at 10% 0%, rgba(92, 147, 107, 0.28), transparent 46%), #08110f;
+}
+
+.eyebrow {
+  color: #b8f26b;
+  font-size: 20rpx;
+  font-weight: 800;
+  letter-spacing: 4rpx;
+}
+
+.title {
+  margin-top: 28rpx;
+  color: #d7ff9e;
+  font-size: 72rpx;
+  font-weight: 700;
+  line-height: 1.05;
+}
+
+.lede {
+  margin-top: 24rpx;
+  color: #a7b4ac;
+  font-size: 30rpx;
+  line-height: 1.65;
+}
+
+.section-title {
+  margin-top: 72rpx;
+  margin-bottom: 22rpx;
+  color: #f4f7f2;
+  font-size: 34rpx;
+  font-weight: 700;
+}
+
+.card {
+  position: relative;
+  margin-bottom: 18rpx;
+  padding: 28rpx;
+  border: 1rpx solid rgba(198, 232, 210, 0.14);
+  border-radius: 24rpx;
+  background: rgba(16, 32, 25, 0.86);
+}
+
+.card-title {
+  color: #f4f7f2;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.card-detail {
+  margin-top: 10rpx;
+  color: #a7b4ac;
+  font-size: 22rpx;
+  word-break: break-all;
+}
+
+.card-state {
+  position: absolute;
+  top: 28rpx;
+  right: 28rpx;
+  font-size: 18rpx;
+  font-weight: 800;
+  letter-spacing: 2rpx;
+}
+
+.card-state.ready {
+  color: #b8f26b;
+}
+
+.card-state.planned {
+  color: #e6c67d;
+}
+
+.empty {
+  color: #a7b4ac;
+  font-size: 26rpx;
+}
+
+.footer {
+  margin-top: 56rpx;
+  color: #718078;
+  font-family: monospace;
+  font-size: 22rpx;
+}

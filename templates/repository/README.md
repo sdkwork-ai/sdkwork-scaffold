@@ -8,28 +8,36 @@ __APP_NAME__ is an SDKWork application initialized from `sdkwork-scaffold` __GEN
 - Owner: `__APP_OWNER__`
 - Domain: `__APP_DOMAIN__`
 - App type: `__APP_TYPE__`
-- Web surfaces: __SELECTED_SURFACES__
+- Architectures: __ARCHITECTURES__
+- Components: __COMPONENT_IDS__
 
 ## What Is Initialized
 
 - Repository baseline and standard root directory dictionary.
 - Canon documentation under [docs/README.md](docs/README.md).
 - Application identity in [agent.app.config.json](agent.app.config.json).
-- Selected React/Vite surface shells under [apps/README.md](apps/README.md).
+- Architecture-specific application roots under [apps/README.md](apps/README.md).
+- Component integration registry, per-component configuration, and SDK clients.
 - Standard pnpm command surface backed by [scripts/sdkwork-command.mjs](scripts/sdkwork-command.mjs).
 - Source-controlled `.sdkwork/` workspace and Canon repository metadata.
+
+Application roots:
+
+__ARCHITECTURE_TABLE__
 
 ## Quick Start
 
 ```bash
 pnpm install
-pnpm dev        # selected development servers
+pnpm dev        # start selected browser/tablet development servers
 pnpm check      # typecheck and SDKWork standards checks
 pnpm test       # local contract tests
-pnpm build      # browser artifacts under apps/*/dist/standalone/prod
+pnpm build      # browser/tablet artifacts under apps/*/dist/standalone/prod
 pnpm verify     # check + test + build
 pnpm stop       # stop development servers started by this repository
 ```
+
+`pnpm dev`, `pnpm build`, and `pnpm stop` operate on web/tablet surfaces. Native iOS, Android, HarmonyOS, Flutter, and mini-program roots keep their own toolchain commands and are generated with the same component contracts.
 
 The generated project expects the canonical SDKWork workspace layout:
 
@@ -57,8 +65,9 @@ Canonical standards live outside this repository:
 - [Repository baseline](__SPECS_REL__/REPOSITORY_BASELINE_SPEC.md)
 - [pnpm script standard](__SPECS_REL__/PNPM_SCRIPT_SPEC.md)
 - [App manifest standard](__SPECS_REL__/APP_MANIFEST_SPEC.md)
-- [PC architecture](__SPECS_REL__/APP_PC_ARCHITECTURE_SPEC.md)
-- [H5 architecture](__SPECS_REL__/APP_H5_ARCHITECTURE_SPEC.md)
+- [Client architecture alignment](__SPECS_REL__/APP_CLIENT_ARCHITECTURE_ALIGNMENT_SPEC.md)
+- [App SDK integration](__SPECS_REL__/APP_SDK_INTEGRATION_SPEC.md)
+- [Component specs](__SPECS_REL__/COMPONENT_SPEC.md)
 
 Do not copy global standards into this repository. Local `specs/` directories narrow or document local contracts only.
 
@@ -68,6 +77,9 @@ Do not copy global standards into this repository. Local `specs/` directories na
 - [specs/README.md](specs/README.md) — repository/application machine contracts.
 - [.sdkwork/README.md](.sdkwork/README.md) — local skills and plugins.
 - [docs/README.md](docs/README.md) — product, architecture, and engineering documentation.
+- [docs/components/README.md](docs/components/README.md) — integrated component catalog and constraints.
+- [specs/components.selected.json](specs/components.selected.json) — machine component selection and per-architecture SDK resolution.
+- [config/components/](config/components/) — per-component runtime configuration.
 - [agent.app.config.json](agent.app.config.json) — application identity and release declaration.
 - `etc/` — source-controlled deployment/runtime profiles.
 - `apis/`, `sdks/`, `crates/` — API contracts, generated SDK families, and backend crates when those capabilities are added.

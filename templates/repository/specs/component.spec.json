@@ -10,7 +10,7 @@
     "domain": "__APP_DOMAIN__",
     "capability": "__APP_CODE__",
     "surface": "app",
-    "languages": ["typescript", "react"],
+    "languages": __APP_LANGUAGES_JSON__,
     "generated": false,
     "manifests": ["package.json", "agent.app.config.json"]
   },

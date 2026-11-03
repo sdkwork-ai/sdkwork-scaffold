@@ -1,0 +1,19 @@
+{
+  "name": "__APP_PACKAGE_NAME__",
+  "version": "0.1.0",
+  "private": true,
+  "description": "WeChat mini-program surface for __APP_NAME__.",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.0"
+  },
+  "sdkwork": {
+    "kind": "mini-program",
+    "architecture": "mini-program",
+    "componentType": "__SURFACE_COMPONENT_TYPE__",
+    "architectureSpec": "__SURFACE_ARCHITECTURE_SPEC__"
+  }
+}

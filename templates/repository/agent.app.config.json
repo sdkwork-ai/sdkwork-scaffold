@@ -17,10 +17,10 @@
   },
   "backend": {},
   "runtime": {
-    "family": "web",
-    "framework": "react",
-    "defaultPlatform": "WEB",
-    "defaultArchitecture": "x64",
+    "family": "__RUNTIME_FAMILY__",
+    "framework": "__RUNTIME_FRAMEWORK__",
+    "defaultPlatform": "__DEFAULT_PLATFORM__",
+    "defaultArchitecture": "__DEFAULT_ARCHITECTURE__",
     "supportedDeploymentProfiles": ["standalone", "cloud"],
     "defaultDeploymentProfile": "standalone"
   },
@@ -59,8 +59,8 @@
   },
   "publish": {
     "status": "DRAFT",
-    "platforms": ["WEB", "H5"],
-    "installPlatforms": ["WEB", "H5"],
+    "platforms": __PUBLISH_PLATFORMS_JSON__,
+    "installPlatforms": __INSTALL_PLATFORMS_JSON__,
     "stores": []
   },
   "artifacts": {
@@ -111,7 +111,9 @@
       "generator": "sdkwork-scaffold",
       "version": "__GENERATOR_VERSION__",
       "generatedAt": "__GENERATED_AT__",
-      "surfaces": __SURFACE_LIST_JSON__
+      "architectures": __ARCHITECTURE_LIST_JSON__,
+      "components": __COMPONENT_LIST_JSON__,
+      "primaryArchitecture": "__PRIMARY_ARCHITECTURE__"
     }
   }
 }

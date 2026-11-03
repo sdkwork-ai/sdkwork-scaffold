@@ -1,0 +1,13 @@
+{
+  "pages": [
+    "pages/index/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "__APP_NAME__",
+    "navigationBarBackgroundColor": "#08110f",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#08110f",
+    "backgroundTextStyle": "light"
+  },
+  "sitemapLocation": "sitemap.json"
+}

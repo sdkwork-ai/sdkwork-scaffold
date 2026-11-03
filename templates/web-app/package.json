@@ -27,7 +27,10 @@
     "vite": "^7.1.0"
   },
   "sdkwork": {
+    "kind": "web",
     "surface": "__SURFACE__",
+    "architecture": "__SURFACE__",
+    "componentType": "__SURFACE_COMPONENT_TYPE__",
     "devPort": __SURFACE_PORT__,
     "architectureSpec": "__SURFACE_ARCHITECTURE_SPEC__"
   }

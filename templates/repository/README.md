@@ -24,7 +24,7 @@ __APP_NAME__ is an SDKWork application initialized from `sdkwork-scaffold` __GEN
 ```bash
 pnpm install
 pnpm dev        # selected development servers
-pnpm check      # typecheck and repository contract checks
+pnpm check      # typecheck and SDKWork standards checks
 pnpm test       # local contract tests
 pnpm build      # browser artifacts under apps/*/dist/standalone/prod
 pnpm verify     # check + test + build

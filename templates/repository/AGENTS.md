@@ -79,10 +79,10 @@ Loading is progressive. Do not eagerly load unrelated language, runtime, UI, dep
 
 ```bash
 pnpm install
-pnpm check
-pnpm test
+pnpm check      # typecheck plus SDKWork standards gates
+pnpm test       # local contract tests
 pnpm build
-pnpm verify
+pnpm verify     # check + test + build
 ```
 
 Record exact commands and outputs. `pnpm build` writes browser artifacts to `apps/sdkwork-__APP_CODE__-<surface>/dist/standalone/prod`.

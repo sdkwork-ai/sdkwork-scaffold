@@ -6,6 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const SPECS_TOOLS = path.resolve(ROOT, '__SPECS_TOOLS_REL__');
 const APPS_ROOT = path.join(ROOT, 'apps');
 const SESSION_FILE = path.join(ROOT, '.sdkwork', 'tmp', 'dev-session.json');
 const PNPM = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
@@ -142,15 +143,51 @@ function test(flags) {
   return status;
 }
 
+function runSpecCheck(tool, args = []) {
+  const toolPath = path.join(SPECS_TOOLS, tool);
+  if (!fs.existsSync(toolPath)) {
+    console.log(`skipped ${tool}: sdkwork-specs tools not found at ${SPECS_TOOLS}`);
+    return 0;
+  }
+  console.log(`checking ${tool}`);
+  const status = run(process.execPath, [toolPath, ...args], ROOT);
+  if (status !== 0) fail(`${tool} failed`);
+  return status;
+}
+
+function standardsCheck() {
+  const checks = [
+    ['check-workspace-layout.mjs', ['--root', '.']],
+    ['check-repository-docs-standard.mjs', ['--root', '.']],
+    ['check-app-manifest-standard.mjs', ['--root', '.']],
+    ['check-pnpm-script-standard.mjs', ['--root', '.']],
+    ['check-workspace-packages-layout.mjs', ['--root', '.', '--mode', 'enforce']],
+    ['check-workspace-federation-paths.mjs', ['--root', '.']],
+    ['check-app-assets-standard.mjs', ['--root', '.']],
+    ['check-source-config-standard.mjs', ['--root', '.']],
+    ['check-vite-workspace-aliases.mjs', ['--root', '.']],
+    ['check-application-layering.mjs', ['--root', '.']],
+    ['verify-repo.mjs', ['--root', '.']],
+    ['audit-repository-baseline.mjs', ['--root', '.']],
+  ];
+  for (const [tool, args] of checks) {
+    const status = runSpecCheck(tool, args);
+    if (status !== 0) return status;
+  }
+  return 0;
+}
+
 function check(flags) {
   const typecheckStatus = typecheck(flags);
   if (typecheckStatus !== 0) return typecheckStatus;
-  return test(flags);
+  return standardsCheck();
 }
 
 function verify(flags) {
   const checkStatus = check(flags);
   if (checkStatus !== 0) return checkStatus;
+  const testStatus = test(flags);
+  if (testStatus !== 0) return testStatus;
   return build(flags);
 }
 

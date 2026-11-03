@@ -24,6 +24,11 @@ struct Index {
         this.Components()
       }
       .tabBar('Components')
+
+      TabContent() {
+        this.Me()
+      }
+      .tabBar('Me')
     }
     .barMode(BarMode.Fixed)
     .barHeight(60)
@@ -211,6 +216,134 @@ struct Index {
     }
     .width('100%')
     .height('100%')
+  }
+
+  @Builder
+  Me() {
+    Scroll() {
+      Column({ space: 8 }) {
+        this.PageHeader(
+          'IDENTITY & SESSION',
+          'My account',
+          'Identity, session, and account security through sdkwork-iam.',
+        )
+
+        Column({ space: 8 }) {
+          Row({ space: 14 }) {
+            Text('__APP_INITIALS__')
+              .fontSize(15)
+              .fontWeight(FontWeight.Bold)
+              .fontColor('#FFFFFF')
+              .width(52)
+              .height(52)
+              .textAlign(TextAlign.Center)
+              .backgroundColor('#0A5CFF')
+              .borderRadius(16)
+
+            Column({ space: 4 }) {
+              Text(this.components.some((component: IntegratedComponent) => component.id === 'iam' && component.supported)
+                ? 'IAM session ready'
+                : 'IAM is not selected')
+                .fontSize(15)
+                .fontWeight(FontWeight.Medium)
+                .fontColor('#0A1324')
+                .width('100%')
+              Text(this.components.some((component: IntegratedComponent) => component.id === 'iam' && component.supported)
+                ? 'Connect the IAM runtime with a base URL and the global token manager to load the signed-in profile.'
+                : 'Select the iam component to enable account, session, and security capabilities.')
+                .fontSize(11)
+                .fontColor('#5A6B85')
+                .width('100%')
+            }
+            .layoutWeight(1)
+            .alignItems(HorizontalAlign.Start)
+
+            Text(this.components.some((component: IntegratedComponent) => component.id === 'iam' && component.supported) ? 'Linked' : 'Plan')
+              .fontSize(10)
+              .fontColor(this.components.some((component: IntegratedComponent) => component.id === 'iam' && component.supported) ? '#0E9F6E' : '#B26A00')
+              .padding({ left: 9, right: 9, top: 3, bottom: 3 })
+              .backgroundColor(this.components.some((component: IntegratedComponent) => component.id === 'iam' && component.supported) ? '#E3F7EF' : '#FFF4E0')
+              .borderRadius(999)
+          }
+          .width('100%')
+
+          Row({ space: 10 }) {
+            this.AccountFact('Application', 'sdkwork-__APP_CODE__')
+            this.AccountFact('IAM package', this.components.find((component: IntegratedComponent) => component.id === 'iam')?.sdkPackage ?? '—')
+          }
+          .width('100%')
+
+          Row({ space: 10 }) {
+            this.AccountFact('Tenant', 'Loaded at runtime')
+            this.AccountFact('Session', 'Global token manager')
+          }
+          .width('100%')
+        }
+        .padding(18)
+        .backgroundColor('#FFFFFF')
+        .borderRadius(14)
+        .width('100%')
+
+        Column({ space: 8 }) {
+          this.CapabilityRow('Profile', 'Display name, email, phone', 'iam.users.current')
+          this.CapabilityRow('Session', 'Retrieve and revoke the current session', 'auth.sessions.current')
+          this.CapabilityRow('Security', 'Password and binding changes', 'iam.users.current')
+          this.CapabilityRow('Preferences', 'Locale, theme, and notification defaults', 'config/components')
+        }
+        .padding(18)
+        .backgroundColor('#FFFFFF')
+        .borderRadius(14)
+        .width('100%')
+      }
+      .padding(16)
+      .width('100%')
+    }
+    .width('100%')
+    .height('100%')
+  }
+
+  @Builder
+  AccountFact(label: string, value: string) {
+    Column({ space: 4 }) {
+      Text(label.toUpperCase())
+        .fontSize(10)
+        .fontWeight(FontWeight.Medium)
+        .fontColor('#5A6B85')
+        .width('100%')
+      Text(value)
+        .fontSize(11)
+        .fontWeight(FontWeight.Medium)
+        .fontColor('#0A1324')
+        .maxLines(1)
+        .width('100%')
+    }
+    .layoutWeight(1)
+    .padding(12)
+    .backgroundColor('#E6EDF8')
+    .borderRadius(10)
+  }
+
+  @Builder
+  CapabilityRow(title: string, detail: string, source: string) {
+    Column({ space: 2 }) {
+      Text(title)
+        .fontSize(14)
+        .fontWeight(FontWeight.Medium)
+        .fontColor('#0A1324')
+        .width('100%')
+      Text(detail)
+        .fontSize(11)
+        .fontColor('#5A6B85')
+        .width('100%')
+      Text(source)
+        .fontSize(10)
+        .fontColor('#0747C9')
+        .width('100%')
+    }
+    .padding(12)
+    .backgroundColor('#E6EDF8')
+    .borderRadius(10)
+    .width('100%')
   }
 
   @Builder

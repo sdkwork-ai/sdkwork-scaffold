@@ -23,7 +23,7 @@ __APP_ROOT_REL__/
   project.yml
 ```
 
-`App/` is the thin installable target. The root uses a native SwiftUI `TabView` with `Overview / Surfaces / Components`. Feature views, services, and state belong in Swift packages under `packages/sdkwork-__APP_CODE__-ios-mobile-<capability>/`.
+`App/` is the thin installable target. The root uses a native SwiftUI `TabView` with `Overview / Surfaces / Components / Me`. Feature views, services, and state belong in Swift packages under `packages/sdkwork-__APP_CODE__-ios-mobile-<capability>/`.
 
 ## Commands
 

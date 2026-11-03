@@ -69,7 +69,7 @@
     </view>
   </block>
 
-  <block wx:else>
+  <block wx:elif="{{activeTab === 'components'}}">
     <text class="eyebrow">COMPOSITION</text>
     <text class="title">Component composition</text>
     <text class="lede">{{linkedCount}} linked · {{plannedCount}} planned · resolved from sibling SDK manifests.</text>
@@ -93,6 +93,65 @@
     </view>
   </block>
 
+  <block wx:else>
+    <text class="eyebrow">IDENTITY &amp; SESSION</text>
+    <text class="title">My account</text>
+    <text class="lede">Identity, session, and account security through sdkwork-iam.</text>
+
+    <view class="card">
+      <view class="account-identity">
+        <text class="account-avatar">__APP_INITIALS__</text>
+        <view class="account-copy">
+          <text class="row-title">{{iamLinked ? 'IAM session ready' : 'IAM is not selected'}}</text>
+          <text class="row-detail">{{iamLinked ? 'Connect the IAM runtime with a base URL and the global token manager to load the signed-in profile.' : 'Select the iam component to enable account, session, and security capabilities.'}}</text>
+        </view>
+        <text class="badge {{iamLinked ? 'ok' : 'warn'}}">{{iamLinked ? 'Linked' : 'Plan'}}</text>
+      </view>
+
+      <view class="account-facts">
+        <view class="fact">
+          <text class="stat-label">Application</text>
+          <text class="fact-value">{{appCode}}</text>
+        </view>
+        <view class="fact">
+          <text class="stat-label">IAM package</text>
+          <text class="fact-value">{{iamPackage || '—'}}</text>
+        </view>
+        <view class="fact">
+          <text class="stat-label">Tenant</text>
+          <text class="fact-value">Loaded at runtime</text>
+        </view>
+        <view class="fact">
+          <text class="stat-label">Session</text>
+          <text class="fact-value">Global token manager</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="capability">
+        <text class="row-title">Profile</text>
+        <text class="row-detail">Display name, email, phone</text>
+        <text class="source">iam.users.current</text>
+      </view>
+      <view class="capability">
+        <text class="row-title">Session</text>
+        <text class="row-detail">Retrieve and revoke the current session</text>
+        <text class="source">auth.sessions.current</text>
+      </view>
+      <view class="capability">
+        <text class="row-title">Security</text>
+        <text class="row-detail">Password and binding changes</text>
+        <text class="source">iam.users.current</text>
+      </view>
+      <view class="capability">
+        <text class="row-title">Preferences</text>
+        <text class="row-detail">Locale, theme, and notification defaults</text>
+        <text class="source">config/components</text>
+      </view>
+    </view>
+  </block>
+
   <text class="footer">{{appCode}} · 小程序</text>
 
   <view class="tabbar">
@@ -107,6 +166,10 @@
     <view class="tab-item {{activeTab === 'components' ? 'active' : ''}}" data-tab="components" bindtap="switchTab">
       <text class="tab-icon">◇</text>
       <text class="tab-label">Components</text>
+    </view>
+    <view class="tab-item {{activeTab === 'me' ? 'active' : ''}}" data-tab="me" bindtap="switchTab">
+      <text class="tab-icon">◎</text>
+      <text class="tab-label">Me</text>
     </view>
   </view>
 </view>

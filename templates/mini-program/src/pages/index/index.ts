@@ -10,6 +10,8 @@ type PageData = {
   activeTab: string;
   linkedCount: number;
   plannedCount: number;
+  iamLinked: boolean;
+  iamPackage: string;
   components: readonly MiniComponent[];
   surfaces: readonly MiniSurface[];
 };
@@ -23,6 +25,7 @@ const surfaces: MiniSurface[] = architectureRoots.map((root) => ({
   ...root,
   mark: root.id.slice(0, 2).toUpperCase(),
 }));
+const iam = integratedComponents.find((component) => component.id === 'iam');
 
 Page({
   data: {
@@ -31,13 +34,15 @@ Page({
     activeTab: 'overview',
     linkedCount,
     plannedCount: integratedComponents.length - linkedCount,
+    iamLinked: iam?.supported === true,
+    iamPackage: iam?.sdkPackage ?? '',
     components,
     surfaces,
   } satisfies PageData,
 
   switchTab(event: { currentTarget: { dataset: { tab?: string } } }): void {
     const tab = event.currentTarget.dataset.tab;
-    if (tab === 'overview' || tab === 'surfaces' || tab === 'components') {
+    if (tab === 'overview' || tab === 'surfaces' || tab === 'components' || tab === 'me') {
       const page = this as unknown as { setData(data: Partial<PageData>): void };
       page.setData({ activeTab: tab });
     }

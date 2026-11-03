@@ -34,6 +34,7 @@ class _FoundationHomePageState extends State<FoundationHomePage> {
     'Overview',
     'Surfaces',
     'Components',
+    'Me',
   ];
 
   int _index = 0;
@@ -69,6 +70,7 @@ class _FoundationHomePageState extends State<FoundationHomePage> {
           _overviewTab(context, linked, planned),
           _surfacesTab(context),
           _componentsTab(context, linked, planned),
+          _meTab(context),
         ],
       ),
       bottomNavigationBar: NavigationBar(
@@ -89,6 +91,11 @@ class _FoundationHomePageState extends State<FoundationHomePage> {
             icon: Icon(Icons.widgets_outlined),
             selectedIcon: Icon(Icons.widgets),
             label: 'Components',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.person_outline),
+            selectedIcon: Icon(Icons.person),
+            label: 'Me',
           ),
         ],
       ),
@@ -284,6 +291,150 @@ class _FoundationHomePageState extends State<FoundationHomePage> {
       ],
     );
   }
+
+  Widget _meTab(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    IntegratedComponent? iam;
+    for (final IntegratedComponent component in integratedComponents) {
+      if (component.id == 'iam') {
+        iam = component;
+        break;
+      }
+    }
+    final bool iamLinked = iam?.supported ?? false;
+
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(16, 20, 16, 32),
+      children: <Widget>[
+        Text(
+          'SDKWORK APPLICATION FOUNDATION',
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: kTechBlue,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 1.5,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'My account',
+          style: theme.textTheme.headlineSmall?.copyWith(
+            color: kInk,
+            fontWeight: FontWeight.w700,
+            letterSpacing: -0.6,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Identity, session, and account security through sdkwork-iam.',
+          style: theme.textTheme.bodyMedium?.copyWith(color: kMuted),
+        ),
+        const SizedBox(height: 16),
+        Container(
+          padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            color: kSurface,
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    width: 52,
+                    height: 52,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: kTechBlue,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: const Text(
+                      '__APP_INITIALS__',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          iamLinked ? 'IAM session ready' : 'IAM is not selected',
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            color: kInk,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          iamLinked
+                              ? 'Connect the IAM runtime with a base URL and the global token manager to load the signed-in profile.'
+                              : 'Select the iam component to enable account, session, and security capabilities.',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: kMuted,
+                            height: 1.55,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  _StatusPill(
+                    label: iamLinked ? 'Linked' : 'Plan',
+                    ready: iamLinked,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: <Widget>[
+                  const _AccountFact(label: 'Application', value: appCode),
+                  const SizedBox(width: 10),
+                  _AccountFact(
+                    label: 'IAM package',
+                    value: iam != null && iam.sdkPackage.isNotEmpty ? iam.sdkPackage : '—',
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              const Row(
+                children: <Widget>[
+                  _AccountFact(label: 'Tenant', value: 'Loaded at runtime'),
+                  SizedBox(width: 10),
+                  _AccountFact(label: 'Session', value: 'Global token manager'),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        Container(
+          padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            color: kSurface,
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              _CapabilityRow(title: 'Profile', detail: 'Display name, email, phone', source: 'iam.users.current'),
+              SizedBox(height: 8),
+              _CapabilityRow(title: 'Session', detail: 'Retrieve and revoke the current session', source: 'auth.sessions.current'),
+              SizedBox(height: 8),
+              _CapabilityRow(title: 'Security', detail: 'Password and binding changes', source: 'iam.users.current'),
+              SizedBox(height: 8),
+              _CapabilityRow(title: 'Preferences', detail: 'Locale, theme, and notification defaults', source: 'config/components'),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 class _StatTile extends StatelessWidget {
@@ -446,6 +597,114 @@ class _SurfaceRow extends StatelessWidget {
           Text(
             root.kind,
             style: theme.textTheme.labelSmall?.copyWith(color: kMuted),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StatusPill extends StatelessWidget {
+  const _StatusPill({required this.label, required this.ready});
+
+  final String label;
+  final bool ready;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+      decoration: BoxDecoration(
+        color: ready ? kSuccessSoft : kWarningSoft,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(
+        label,
+        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: ready ? kSuccess : kWarning,
+              fontWeight: FontWeight.w600,
+            ),
+      ),
+    );
+  }
+}
+
+class _AccountFact extends StatelessWidget {
+  const _AccountFact({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: kSurfaceAlt,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              label.toUpperCase(),
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: kMuted,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.5,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              value,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: kInk,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CapabilityRow extends StatelessWidget {
+  const _CapabilityRow({required this.title, required this.detail, required this.source});
+
+  final String title;
+  final String detail;
+  final String source;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: kSurfaceAlt,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            title,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: kInk,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(detail, style: theme.textTheme.bodySmall?.copyWith(color: kMuted)),
+          const SizedBox(height: 4),
+          Text(
+            source,
+            style: theme.textTheme.labelSmall?.copyWith(color: kTechBlueStrong),
           ),
         ],
       ),

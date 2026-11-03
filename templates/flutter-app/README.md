@@ -25,7 +25,7 @@ __APP_ROOT_REL__/
   pubspec.yaml
 ```
 
-`lib/` stays thin: app entry, root shell, component registry, and bootstrap wiring. The shell uses a Material 3 bottom `NavigationBar` with `Overview / Surfaces / Components`. Feature screens belong in `packages/__DART_PACKAGE_NAME__-<capability>/`.
+`lib/` stays thin: app entry, root shell, component registry, and bootstrap wiring. The shell uses a Material 3 bottom `NavigationBar` with `Overview / Surfaces / Components / Me`. Feature screens belong in `packages/__DART_PACKAGE_NAME__-<capability>/`.
 
 ## Commands
 

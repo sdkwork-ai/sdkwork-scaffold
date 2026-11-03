@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Dashboard
 import androidx.compose.material.icons.outlined.Layers
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -96,6 +97,7 @@ private fun SdkworkAppShell() {
         Triple("Overview", Icons.Outlined.Dashboard, 0),
         Triple("Surfaces", Icons.Outlined.Layers, 1),
         Triple("Components", Icons.Outlined.Widgets, 2),
+        Triple("Me", Icons.Outlined.Person, 3),
     )
 
     Scaffold(
@@ -116,7 +118,8 @@ private fun SdkworkAppShell() {
         when (selectedTab) {
             0 -> OverviewScreen(ComponentRegistry.components, ArchitectureRegistry.roots, Modifier.padding(padding))
             1 -> SurfacesScreen(ArchitectureRegistry.roots, Modifier.padding(padding))
-            else -> ComponentsScreen(ComponentRegistry.components, Modifier.padding(padding))
+            2 -> ComponentsScreen(ComponentRegistry.components, Modifier.padding(padding))
+            else -> MeScreen(ComponentRegistry.components, Modifier.padding(padding))
         }
     }
 }
@@ -246,6 +249,149 @@ private fun ComponentsScreen(components: List<IntegratedComponent>, modifier: Mo
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun MeScreen(components: List<IntegratedComponent>, modifier: Modifier = Modifier) {
+    val iam = components.firstOrNull { it.id == "iam" }
+    val iamLinked = iam?.supported == true
+
+    LazyColumn(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        contentPadding = PaddingValues(vertical = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        item {
+            PageHeader("Me", "My account", "Identity, session, and account security through sdkwork-iam.")
+        }
+        item {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = SurfaceWhite),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+                shape = RoundedCornerShape(14.dp),
+            ) {
+                Column(Modifier.padding(18.dp)) {
+                    Row(verticalAlignment = Alignment.Top) {
+                        Box(
+                            modifier = Modifier
+                                .size(52.dp)
+                                .background(TechBlue, RoundedCornerShape(16.dp)),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Text(
+                                text = "__APP_INITIALS__",
+                                color = Color.White,
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold,
+                            )
+                        }
+                        Spacer(Modifier.width(14.dp))
+                        Column(Modifier.weight(1f)) {
+                            Text(
+                                text = if (iamLinked) "IAM session ready" else "IAM is not selected",
+                                color = Ink,
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.SemiBold,
+                            )
+                            Spacer(Modifier.height(4.dp))
+                            Text(
+                                text = if (iamLinked) {
+                                    "Connect the IAM runtime with a base URL and the global token manager to load the signed-in profile."
+                                } else {
+                                    "Select the iam component to enable account, session, and security capabilities."
+                                },
+                                color = Muted,
+                                style = MaterialTheme.typography.bodySmall,
+                            )
+                        }
+                        Spacer(Modifier.width(8.dp))
+                        StatusPill(if (iamLinked) "Linked" else "Plan", iamLinked)
+                    }
+
+                    Spacer(Modifier.height(16.dp))
+                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        AccountFact("Application", "sdkwork-__APP_CODE__", Modifier.weight(1f))
+                        AccountFact(
+                            "IAM package",
+                            iam?.sdkPackage?.takeIf { it.isNotEmpty() } ?: "—",
+                            Modifier.weight(1f),
+                        )
+                    }
+                    Spacer(Modifier.height(10.dp))
+                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        AccountFact("Tenant", "Loaded at runtime", Modifier.weight(1f))
+                        AccountFact("Session", "Global token manager", Modifier.weight(1f))
+                    }
+                }
+            }
+        }
+        item {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = SurfaceWhite),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+                shape = RoundedCornerShape(14.dp),
+            ) {
+                Column(Modifier.padding(18.dp)) {
+                    CapabilityRow("Profile", "Display name, email, phone", "iam.users.current")
+                    Spacer(Modifier.height(8.dp))
+                    CapabilityRow("Session", "Retrieve and revoke the current session", "auth.sessions.current")
+                    Spacer(Modifier.height(8.dp))
+                    CapabilityRow("Security", "Password and binding changes", "iam.users.current")
+                    Spacer(Modifier.height(8.dp))
+                    CapabilityRow("Preferences", "Locale, theme, and notification defaults", "config/components")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun StatusPill(label: String, ready: Boolean) {
+    Box(
+        modifier = Modifier
+            .background(if (ready) SuccessSoft else WarningSoft, RoundedCornerShape(999.dp))
+            .padding(horizontal = 9.dp, vertical = 3.dp),
+    ) {
+        Text(
+            text = label,
+            color = if (ready) Success else Warning,
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = FontWeight.SemiBold,
+        )
+    }
+}
+
+@Composable
+private fun AccountFact(label: String, value: String, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .background(SurfaceAlt, RoundedCornerShape(10.dp))
+            .padding(12.dp),
+    ) {
+        Text(label.uppercase(), color = Muted, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.SemiBold)
+        Spacer(Modifier.height(4.dp))
+        Text(value, color = Ink, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.SemiBold, maxLines = 1)
+    }
+}
+
+@Composable
+private fun CapabilityRow(title: String, detail: String, source: String) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(SurfaceAlt, RoundedCornerShape(10.dp))
+            .padding(12.dp),
+    ) {
+        Text(title, color = Ink, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+        Spacer(Modifier.height(2.dp))
+        Text(detail, color = Muted, style = MaterialTheme.typography.bodySmall)
+        Spacer(Modifier.height(4.dp))
+        Text(source, color = TechBlueStrong, style = MaterialTheme.typography.labelSmall)
     }
 }
 

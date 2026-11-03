@@ -24,7 +24,7 @@ __APP_ROOT_REL__/
   tsconfig.json
 ```
 
-`src/` is authored TypeScript. The root uses a custom fixed bottom tab bar with `Overview / Surfaces / Components` and respect for the device safe-area inset. Platform JavaScript is a projection if a build step is added. Business pages belong in source packages projected into pages/subpackages, not directly in the shell.
+`src/` is authored TypeScript. The root uses a custom fixed bottom tab bar with `Overview / Surfaces / Components / Me` and respect for the device safe-area inset. Platform JavaScript is a projection if a build step is added. Business pages belong in source packages projected into pages/subpackages, not directly in the shell.
 
 ## Commands
 

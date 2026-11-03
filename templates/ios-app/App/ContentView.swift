@@ -49,6 +49,16 @@ struct ContentView: View {
                 Label("Components", systemImage: "square.stack.3d.up")
             }
             .tag(2)
+
+            NavigationStack {
+                MeTab()
+                    .navigationTitle("Me")
+                    .navigationBarTitleDisplayMode(.inline)
+            }
+            .tabItem {
+                Label("Me", systemImage: "person")
+            }
+            .tag(3)
         }
         .tint(Palette.accent)
         .preferredColorScheme(.light)
@@ -192,6 +202,125 @@ private struct ComponentsTab: View {
             .padding(16)
         }
         .background(Palette.canvas)
+    }
+}
+
+private struct MeTab: View {
+    private let components = __IOS_MODULE_NAME__ComponentRegistry.components
+
+    private var iam: IntegratedComponent? {
+        components.first(where: { $0.id == "iam" })
+    }
+
+    private var iamLinked: Bool {
+        iam?.supported == true
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                PageHeader(
+                    eyebrow: "IDENTITY & SESSION",
+                    title: "My account",
+                    subtitle: "Identity, session, and account security through sdkwork-iam."
+                )
+
+                Panel {
+                    HStack(alignment: .top, spacing: 14) {
+                        Text("__APP_INITIALS__")
+                            .font(.system(size: 15, weight: .bold))
+                            .foregroundStyle(.white)
+                            .frame(width: 52, height: 52)
+                            .background(Palette.accent)
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
+
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(iamLinked ? "IAM session ready" : "IAM is not selected")
+                                .font(.headline)
+                                .foregroundStyle(Palette.ink)
+                            Text(iamLinked
+                                 ? "Connect the IAM runtime with a base URL and the global token manager to load the signed-in profile."
+                                 : "Select the iam component to enable account, session, and security capabilities.")
+                                .font(.caption)
+                                .foregroundStyle(Palette.muted)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        Spacer(minLength: 6)
+                        Text(iamLinked ? "Linked" : "Plan")
+                            .font(.caption2.weight(.semibold))
+                            .foregroundStyle(iamLinked ? Palette.success : Palette.warning)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 3)
+                            .background(iamLinked ? Palette.successSoft : Palette.warningSoft)
+                            .clipShape(Capsule())
+                    }
+
+                    HStack(spacing: 10) {
+                        AccountFact(label: "Application", value: "sdkwork-__APP_CODE__")
+                        AccountFact(label: "IAM package", value: iam?.sdkPackage.isEmpty == false ? iam!.sdkPackage : "—")
+                    }
+                    HStack(spacing: 10) {
+                        AccountFact(label: "Tenant", value: "Loaded at runtime")
+                        AccountFact(label: "Session", value: "Global token manager")
+                    }
+                }
+
+                Panel {
+                    CapabilityRow(title: "Profile", detail: "Display name, email, phone", source: "iam.users.current")
+                    CapabilityRow(title: "Session", detail: "Retrieve and revoke the current session", source: "auth.sessions.current")
+                    CapabilityRow(title: "Security", detail: "Password and binding changes", source: "iam.users.current")
+                    CapabilityRow(title: "Preferences", detail: "Locale, theme, and notification defaults", source: "config/components")
+                }
+            }
+            .padding(16)
+        }
+        .background(Palette.canvas)
+    }
+}
+
+private struct AccountFact: View {
+    let label: String
+    let value: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(label.uppercased())
+                .font(.system(size: 10, weight: .semibold))
+                .tracking(0.6)
+                .foregroundStyle(Palette.muted)
+            Text(value)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(Palette.ink)
+                .lineLimit(1)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(12)
+        .background(Palette.surfaceAlt)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+    }
+}
+
+private struct CapabilityRow: View {
+    let title: String
+    let detail: String
+    let source: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(Palette.ink)
+            Text(detail)
+                .font(.caption2)
+                .foregroundStyle(Palette.muted)
+            Text(source)
+                .font(.caption2.monospaced())
+                .foregroundStyle(Palette.accentStrong)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(12)
+        .background(Palette.surfaceAlt)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 }
 

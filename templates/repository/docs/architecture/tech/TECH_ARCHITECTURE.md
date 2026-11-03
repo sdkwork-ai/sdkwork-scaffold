@@ -27,7 +27,14 @@ The app shells are thin composition roots. Business behavior, service ports, gen
 | Components | __COMPONENT_IDS__ |
 | Local verification | `pnpm check`, `pnpm test`, `pnpm build` |
 
-### 2.1 Visual Baseline
+### 2.1 Standard Capabilities
+
+`specs/capabilities/catalog.json` is the machine catalog; `docs/capabilities/ME.md`
+is the account/IAM contract. The standard `Me` capability consumes IAM only
+(`auth.sessions.current`, `iam.users.current`), owns no tokens, and renders
+`Unavailable` until a runtime is configured.
+
+### 2.2 Visual Baseline
 
 The generated client surfaces use the tech-blue SDKWork Doctor visual baseline:
 
@@ -50,7 +57,7 @@ Rules:
 - Separation comes from canvas/surface/tonal layers, not strokes.
 - One accent family; status uses the shared success/warn/error/skipped tokens.
 - PC uses an 88px navy rail.
-- H5, Flutter, iOS, Android, HarmonyOS, and the mini program use a fixed bottom tab bar with `Overview / Surfaces / Components`.
+- H5, Flutter, iOS, Android, HarmonyOS, and the mini program use a fixed bottom tab bar with `Overview / Surfaces / Components / Me`.
 - Flutter mirrors the same tokens in `lib/theme/app_theme.dart`; native shells keep the same color constants in their component registry.
 
 ## 3. System Boundaries And Modules

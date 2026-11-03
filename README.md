@@ -219,10 +219,23 @@ All generated clients use the tech-blue, flat, borderless visual system of
 Rules: no card borders, no shadows, no gradients. Separation comes from
 canvas/surface/tonal layers. PC uses an 88px navy icon rail. H5, Flutter,
 iOS, Android, HarmonyOS, and the mini program use a fixed bottom tab bar with
-`Overview / Surfaces / Components`; mobile content switches in place and
+`Overview / Surfaces / Components / Me`; mobile content switches in place and
 respects the safe-area inset. Flutter carries the same tokens in
 `lib/theme/app_theme.dart`; iOS, Android, HarmonyOS, and the mini program keep
 the same palette in their generated shells.
+
+## Standard Capabilities
+
+Every generated application receives `specs/capabilities/catalog.json` and
+`docs/capabilities/ME.md`. The standard `Me` capability is IAM-backed:
+
+- `src/account/iam-account.ts` on web surfaces
+- `@sdkwork/iam-app-sdk` only, never raw HTTP or manual auth headers
+- session: `auth.sessions.current.retrieve()` / `.delete()`
+- profile: `iam.users.current.retrieve()`
+
+The scaffold renders the `Unavailable` state until a runtime endpoint and token
+manager are configured. It does not fake a signed-in user.
 
 ## Standard Commands
 

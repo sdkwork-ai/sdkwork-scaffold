@@ -6,7 +6,12 @@ const surface: string = '__SURFACE__';
 const surfaceTitle = '__SURFACE_TITLE__';
 const architectureRoots = __ARCHITECTURE_ROOTS_JSON__;
 
-type MobileTab = 'overview' | 'surfaces' | 'components';
+type MobileTab = 'overview' | 'surfaces' | 'components' | 'me';
+
+function resolveInitialTab(): MobileTab {
+  const tab = new URLSearchParams(window.location.search).get('tab');
+  return tab === 'surfaces' || tab === 'components' || tab === 'me' ? tab : 'overview';
+}
 const deploymentProfile = import.meta.env.VITE_SDKWORK_DEPLOYMENT_PROFILE
   ?? import.meta.env.MODE;
 
@@ -35,10 +40,18 @@ const steps: readonly FoundationStep[] = [
 ];
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<MobileTab>('overview');
+  const [activeTab, setActiveTab] = useState<MobileTab>(resolveInitialTab);
   const isMobile = surface === 'h5';
+  const selectTab = (tab: MobileTab) => {
+    setActiveTab(tab);
+    const url = new URL(window.location.href);
+    url.searchParams.set('tab', tab);
+    window.history.replaceState({}, '', url);
+  };
   const linked = integratedComponents.filter((component) => component.supported).length;
   const planned = integratedComponents.length - linked;
+  const iam = integratedComponents.find((component) => component.id === 'iam');
+  const iamLinked = Boolean(iam?.supported);
 
   return (
     <div className="scaffold-app" data-surface={surface} data-active-tab={activeTab}>
@@ -58,6 +71,10 @@ export default function App() {
           <a className="scaffold-rail-item" href="#components">
             <span className="scaffold-rail-icon" aria-hidden="true">◇</span>
             <span>Components</span>
+          </a>
+          <a className="scaffold-rail-item" href="#me">
+            <span className="scaffold-rail-icon" aria-hidden="true">◎</span>
+            <span>Me</span>
           </a>
         </nav>
         <div className="scaffold-rail-footer">
@@ -190,6 +207,65 @@ export default function App() {
           )}
         </section>
 
+        <section className="scaffold-panel" id="me" aria-labelledby="me-title">
+          <div className="scaffold-panel-head">
+            <div>
+              <h2 className="scaffold-panel-title" id="me-title">My account</h2>
+              <p className="scaffold-panel-subtitle">Identity, session, and account security through sdkwork-iam.</p>
+            </div>
+            <span className="scaffold-badge" data-status={iamLinked ? 'ok' : 'warn'}>
+              {iamLinked ? 'IAM linked' : 'IAM plan'}
+            </span>
+          </div>
+
+          <div className="scaffold-account">
+            <div className="scaffold-account-identity">
+              <span className="scaffold-account-avatar" aria-hidden="true">__APP_INITIALS__</span>
+              <div>
+                <strong>{iamLinked ? 'IAM session ready' : 'IAM is not selected'}</strong>
+                <p>
+                  {iamLinked
+                    ? 'Connect the IAM runtime with a base URL and the global token manager to load the signed-in profile.'
+                    : 'Select the iam component to enable account, session, and security capabilities.'}
+                </p>
+              </div>
+            </div>
+
+            <div className="scaffold-account-facts">
+              <div>
+                <span>Application</span>
+                <strong>sdkwork-__APP_CODE__</strong>
+              </div>
+              <div>
+                <span>IAM package</span>
+                <strong>{iam?.sdkPackage ?? '—'}</strong>
+              </div>
+              <div>
+                <span>Tenant</span>
+                <strong>Loaded at runtime</strong>
+              </div>
+              <div>
+                <span>Session</span>
+                <strong>Global token manager</strong>
+              </div>
+            </div>
+
+            <div className="scaffold-account-actions">
+              <code>src/account/iam-account.ts</code>
+              <span className="scaffold-badge" data-status={iamLinked ? 'ok' : 'warn'}>
+                {iamLinked ? 'Service generated' : 'Unavailable'}
+              </span>
+            </div>
+          </div>
+
+          <div className="scaffold-account-links">
+            <div><strong>Profile</strong><span>Display name, email, phone</span><code>iam.users.current</code></div>
+            <div><strong>Session</strong><span>Retrieve and revoke the current session</span><code>auth.sessions.current</code></div>
+            <div><strong>Security</strong><span>Password and binding changes</span><code>iam.users.current</code></div>
+            <div><strong>Preferences</strong><span>Locale, theme, and notification defaults</span><code>config/components</code></div>
+          </div>
+        </section>
+
         <section className="scaffold-callout" aria-label="Next step">
           <div>
             <p className="scaffold-eyebrow">Recommended next move</p>
@@ -213,7 +289,7 @@ export default function App() {
             type="button"
             className="scaffold-bottom-tab"
             aria-current={activeTab === 'overview' ? 'page' : undefined}
-            onClick={() => setActiveTab('overview')}
+            onClick={() => selectTab('overview')}
           >
             <span aria-hidden="true">◫</span>
             <span>Overview</span>
@@ -222,7 +298,7 @@ export default function App() {
             type="button"
             className="scaffold-bottom-tab"
             aria-current={activeTab === 'surfaces' ? 'page' : undefined}
-            onClick={() => setActiveTab('surfaces')}
+            onClick={() => selectTab('surfaces')}
           >
             <span aria-hidden="true">▤</span>
             <span>Surfaces</span>
@@ -231,10 +307,19 @@ export default function App() {
             type="button"
             className="scaffold-bottom-tab"
             aria-current={activeTab === 'components' ? 'page' : undefined}
-            onClick={() => setActiveTab('components')}
+            onClick={() => selectTab('components')}
           >
             <span aria-hidden="true">◇</span>
             <span>Components</span>
+          </button>
+          <button
+            type="button"
+            className="scaffold-bottom-tab"
+            aria-current={activeTab === 'me' ? 'page' : undefined}
+            onClick={() => selectTab('me')}
+          >
+            <span aria-hidden="true">◎</span>
+            <span>Me</span>
           </button>
         </nav>
       ) : null}

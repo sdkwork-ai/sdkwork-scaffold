@@ -8,7 +8,7 @@ import {
   SCAFFOLD_VERSION,
   TEMPLATE_GROUPS,
 } from '../scaffold.config.mjs';
-import { COMPONENTS } from '../components.config.mjs';
+import { COMPONENTS, COMPONENT_PRESETS } from '../components.config.mjs';
 import { USAGE, parseScaffoldArguments } from '../lib/arguments.mjs';
 import { componentCatalogForList } from '../lib/components.mjs';
 import {
@@ -54,6 +54,14 @@ function printComponents(workspace) {
   }
 }
 
+function printPresets() {
+  console.log('SDKWork component presets');
+  console.log('');
+  for (const [name, components] of Object.entries(COMPONENT_PRESETS)) {
+    console.log(`- ${name}: ${components.join(', ')}`);
+  }
+}
+
 function printPlan(plan) {
   console.log('Generation plan:');
   for (const entry of plan) {
@@ -85,6 +93,10 @@ function main() {
   }
   if (options.listComponents) {
     printComponents(path.dirname(SCAFFOLD_ROOT));
+    return;
+  }
+  if (options.listPresets) {
+    printPresets();
     return;
   }
   if (options.selfCheck) {

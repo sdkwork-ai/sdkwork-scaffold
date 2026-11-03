@@ -18,6 +18,7 @@ This repository follows `../sdkwork-specs/README.md`. It is a tooling/standards 
 - `lib/` — argument parsing, variable creation, template rendering, generation, and verification.
 - `templates/` — repository and architecture-specific application template groups.
 - `tests/` — generator unit and integration tests.
+- `scripts/regression-matrix.mjs` — repeatable eight-architecture generation and toolchain regression.
 - `scaffold.config.mjs` — architecture and template-group registry.
 - `components.config.mjs` — common-component catalog resolved from sibling SDK manifests.
 
@@ -55,7 +56,10 @@ This repository follows `../sdkwork-specs/README.md`. It is a tooling/standards 
 ```bash
 pnpm test
 pnpm check
+pnpm regression
 node bin/sdkwork-scaffold.mjs --list
+node bin/sdkwork-scaffold.mjs --list-components
+node bin/sdkwork-scaffold.mjs --list-presets
 ```
 
 ## Agent Execution Rules

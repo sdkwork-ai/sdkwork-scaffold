@@ -109,9 +109,23 @@ Selection:
 
 ```bash
 --components iam,appbase,rtc,im,agents,order
+--preset foundation,communication
 --all-components
 --components none
 ```
+
+Presets:
+
+| Preset | Components |
+| --- | --- |
+| `foundation` | `iam`, `appbase` |
+| `communication` | `rtc`, `im`, `mail`, `messaging` |
+| `commerce` | `order`, `payment`, `commerce`, `catalog`, `membership`, `promotion` |
+| `content` | `drive`, `community`, `comments`, `feeds`, `news`, `documents`, `notes`, `assets`, `course`, `music`, `audio`, `search` |
+| `ai` | `agents`, `image`, `knowledgebase`, `memory`, `voice`, `generations`, `prompts`, `models`, `skills` |
+| `platform` | `notary`, `aiot` |
+
+Run `--list-presets` for the live list.
 
 Every component is resolved from its sibling repository `sdks/<family>/sdk-manifest.json`. The generator does not hardcode package paths:
 
@@ -239,6 +253,32 @@ Template variables include:
 | `__APP_ROOT_REL__`, `__APP_PACKAGE_NAME__` | Current app root/package |
 | `__DART_PACKAGE_NAME__`, `__ANDROID_NAMESPACE__`, `__IOS_MODULE_NAME__`, `__HARMONY_BUNDLE_NAME__` | Native identifiers |
 
+## Regression Matrix
+
+Generate every architecture in isolation, install dependencies, and run whatever
+toolchain is available on the machine:
+
+```bash
+pnpm regression
+# or a focused run
+node scripts/regression-matrix.mjs --architectures pc,flutter,mini-program --components iam,im,agents
+```
+
+The matrix:
+
+- generates one project per architecture under `_scratch/scaffold-matrix-*`;
+- runs PC/H5/Pad TypeScript + Vite build;
+- runs Flutter `pub get`, `analyze`, and `test`;
+- runs mini-program TypeScript checks;
+- verifies iOS/Android/HarmonyOS source roots and integration plans statically;
+- removes successful projects and keeps failed ones for inspection;
+- writes `.sdkwork/tmp/scaffold-regression-matrix.json`.
+
+Current regression result: **8/8 architectures passed** with the core
+`iam,appbase,rtc,im,agents,order` selection. PC, H5, Pad, Flutter, and
+mini-program ran real toolchain checks; iOS, Android, and HarmonyOS were
+static-only because their compilers are not installed in this environment.
+
 ## Verification
 
 ```bash
@@ -247,11 +287,12 @@ pnpm check
 
 The scaffold tests cover:
 
-- argument parsing and configuration
+- argument parsing, presets, and configuration
 - template self-check for all 7 template groups and 8 architectures
 - PC/H5 linked component generation
 - every architecture generated independently
 - web subsets and component overrides
+- all registered components on one web root
 - native unsupported-language degradation
 - target and `--force` safety
 - unresolved template tokens

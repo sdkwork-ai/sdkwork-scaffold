@@ -97,6 +97,23 @@ test('parseScaffoldArguments supports surfaces alias and component config', () =
   assert.deepEqual(options.components.map((component) => component.id), ['rtc']);
 });
 
+test('component presets expand into component selections', () => {
+  const options = parseScaffoldArguments([
+    '--code', 'sample-app',
+    '--target', path.join(os.tmpdir(), 'sample-target-3'),
+    '--architectures', 'pc',
+    '--components', 'none',
+    '--preset', 'foundation,commerce',
+    '--no-git',
+    '--no-install',
+  ]);
+  const ids = options.components.map((component) => component.id);
+  for (const expected of ['iam', 'appbase', 'order', 'payment', 'commerce']) {
+    assert.ok(ids.includes(expected), `missing ${expected}`);
+  }
+  assert.equal(new Set(ids).size, ids.length);
+});
+
 test('parseScaffoldArguments rejects invalid architectures and components', () => {
   assert.throws(
     () => parseScaffoldArguments(['--code', 'Sample_App', '--target', 'out']),

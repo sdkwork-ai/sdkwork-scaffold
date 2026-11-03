@@ -457,6 +457,25 @@ export const DEFAULT_COMPONENTS = Object.values(COMPONENTS)
   .filter((component) => component.defaultEnabled)
   .map((component) => component.id);
 
+export const COMPONENT_PRESETS = {
+  foundation: ['iam', 'appbase'],
+  communication: ['rtc', 'im', 'mail', 'messaging'],
+  commerce: ['order', 'payment', 'commerce', 'catalog', 'membership', 'promotion'],
+  content: ['drive', 'community', 'comments', 'feeds', 'news', 'documents', 'notes', 'assets', 'course', 'music', 'audio', 'search'],
+  ai: ['agents', 'image', 'knowledgebase', 'memory', 'voice', 'generations', 'prompts', 'models', 'skills'],
+  platform: ['notary', 'aiot'],
+};
+
+export function resolveComponentPreset(name) {
+  const preset = COMPONENT_PRESETS[String(name).trim().toLowerCase()];
+  if (!preset) {
+    throw new Error(
+      `Unknown component preset "${name}". Supported presets: ${Object.keys(COMPONENT_PRESETS).join(', ')}`,
+    );
+  }
+  return preset;
+}
+
 export function resolveComponent(id) {
   const component = COMPONENTS[id];
   if (!component) {

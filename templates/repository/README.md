@@ -15,7 +15,7 @@ __APP_NAME__ is an SDKWork application initialized from `sdkwork-scaffold` __GEN
 - Repository baseline and standard root directory dictionary.
 - Canon documentation under [docs/README.md](docs/README.md).
 - Application identity in [agent.app.config.json](agent.app.config.json).
-- PC and H5 React/Vite surface shells under [apps/README.md](apps/README.md).
+- Selected React/Vite surface shells under [apps/README.md](apps/README.md).
 - Standard pnpm command surface backed by [scripts/sdkwork-command.mjs](scripts/sdkwork-command.mjs).
 - Source-controlled `.sdkwork/` workspace and Canon repository metadata.
 
@@ -23,7 +23,7 @@ __APP_NAME__ is an SDKWork application initialized from `sdkwork-scaffold` __GEN
 
 ```bash
 pnpm install
-pnpm dev        # PC and H5 development servers
+pnpm dev        # selected development servers
 pnpm check      # typecheck and repository contract checks
 pnpm test       # local contract tests
 pnpm build      # browser artifacts under apps/*/dist/standalone/prod

@@ -8,7 +8,7 @@ const deploymentProfile = import.meta.env.VITE_SDKWORK_DEPLOYMENT_PROFILE
 type FoundationStep = {
   readonly title: string;
   readonly body: string;
-  readonly state: 'ready' | 'next';
+  readonly state: 'ready' | 'pending';
 };
 
 const steps: readonly FoundationStep[] = [
@@ -18,14 +18,14 @@ const steps: readonly FoundationStep[] = [
     state: 'ready',
   },
   {
-    title: 'Browser surfaces',
-    body: 'PC and H5 shells share one product identity while keeping independent architecture roots and package manifests.',
+    title: 'Architecture surfaces',
+    body: 'Web, tablet, native, Flutter, and mini-program roots share one product identity while keeping independent architecture roots and package manifests.',
     state: 'ready',
   },
   {
     title: 'First vertical workflow',
     body: 'Add requirements, API contracts, generated SDKs, and package-level feature modules before building product screens.',
-    state: 'next',
+    state: 'pending',
   },
 ];
 

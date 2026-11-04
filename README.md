@@ -240,6 +240,8 @@ The standard `Me` capability is IAM-backed:
 - session: `auth.sessions.current.retrieve()` / `.delete()`
 - profile: `iam.users.current.retrieve()`
 - organization and login-context selection are first-class outcomes
+- open-platform sign-in (Apple, Google, Meta, GitHub, X, WeChat) through
+  `docs/capabilities/SOCIAL_LOGIN.md`; IAM owns provider secrets and callbacks
 
 The runtime capability installs `src/appbase/runtime.ts` and
 `src/appbase/AppErrorBoundary.tsx` through `src/main.tsx`. Missing API

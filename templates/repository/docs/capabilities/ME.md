@@ -51,6 +51,14 @@ repository has no runtime endpoint or credentials yet. The sign-in form is
 disabled until `VITE_SDKWORK_API_BASE_URL` is configured. Do not fake a signed-in
 user.
 
+## Social Sign-In
+
+Open-platform sign-in is a projection of the same IAM account capability.
+Provider selection, backend authority, and the Flutter adapter contract live in
+`docs/capabilities/SOCIAL_LOGIN.md` and
+`specs/capabilities/social-login.contract.json`. The account page renders only
+the intersection of the IAM provider discovery and the local allowlist.
+
 ## Required Layout
 
 - Identity block: avatar/initials, display name, account status.

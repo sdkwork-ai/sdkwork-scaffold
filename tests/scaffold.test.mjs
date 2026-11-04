@@ -202,6 +202,56 @@ test('generator honors a web architecture subset and component config', (t) => {
   assert.equal(verifyGeneratedRepository(target, options).ok, true);
 });
 
+test('social login follows frontend provider configuration', (t) => {
+  const target = makeTempDirectory();
+  t.after(() => fs.rmSync(target, { recursive: true, force: true }));
+
+  const options = makeOptions(target, {
+    architectures: ['flutter'],
+    surfaces: ['flutter'],
+    appType: 'APP_FLUTTER',
+    components: [{
+      id: 'iam',
+      config: {
+        socialLogin: {
+          enabledProviders: ['google', 'github'],
+          providerLabels: { google: 'Google Workspace' },
+          redirectUri: 'sdkwork://oauth/callback',
+        },
+      },
+    }],
+  });
+  generate(options);
+
+  const contract = JSON.parse(fs.readFileSync(
+    path.join(target, 'specs', 'capabilities', 'social-login.contract.json'),
+    'utf8',
+  ));
+  assert.deepEqual(contract.frontend.enabledProviders, ['google', 'github']);
+  assert.equal(contract.frontend.providerLabels.google, 'Google Workspace');
+  assert.equal(contract.backend.secretsOwner, 'sdkwork-iam');
+  assert.deepEqual(
+    contract.providers.filter((provider) => provider.enabled).map((provider) => provider.id),
+    ['google', 'github'],
+  );
+
+  const dartConfig = fs.readFileSync(
+    path.join(
+      target,
+      'apps',
+      'sdkwork-sample-app-flutter-mobile',
+      'lib',
+      'auth',
+      'social',
+      'social_login_config.dart',
+    ),
+    'utf8',
+  );
+  assert.match(dartConfig, /\["google","github"\]/u);
+  assert.match(dartConfig, /Google Workspace/u);
+  assert.equal(verifyGeneratedRepository(target, options).ok, true);
+});
+
 test('all registered components can be scaffolded on one web root', (t) => {
   const target = makeTempDirectory();
   t.after(() => fs.rmSync(target, { recursive: true, force: true }));

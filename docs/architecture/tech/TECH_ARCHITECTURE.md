@@ -64,6 +64,11 @@ standard `foundation`, `surfaces`, `components`, `runtime`, and `me` capabilitie
 - `src/appbase/runtime.ts` and `src/appbase/AppErrorBoundary.tsx` — environment
   resolution and failure containment through `src/main.tsx`.
 
+`social-login` is a second identity capability. IAM owns provider discovery,
+secrets, and callbacks; each client owns only its allowlist and presentation.
+Flutter projects generate a provider-agnostic port/adapter module under
+`lib/auth/social/`, backed by `specs/capabilities/social-login.contract.json`.
+
 ## 6. Visual Baseline
 
 Generated clients use the `sdkwork-doctor` tech-blue system: `#f2f5fa` canvas, `#ffffff` surfaces, `#e6edf8` tonal rows, `#061a3a` chrome, `#0a5cff` accent, 14/10px radii, zero borders/shadows/gradients.

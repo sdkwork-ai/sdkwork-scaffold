@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'auth/social/social_auth_factory.dart';
+import 'auth/social/social_auth_launcher.dart';
+import 'auth/social/social_login_panel.dart';
 import 'composition/architecture_registry.dart';
 import 'composition/component_registry.dart';
 import 'theme/app_theme.dart';
@@ -412,6 +415,13 @@ class _FoundationHomePageState extends State<FoundationHomePage> {
             ],
           ),
         ),
+        if (iamLinked) ...<Widget>[
+          const SizedBox(height: 16),
+          SocialLoginPanel(
+            service: createIamSocialAuthService(),
+            launcher: const BrowserSocialAuthLauncher(),
+          ),
+        ],
         const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.all(18),

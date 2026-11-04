@@ -24,6 +24,18 @@ export const COMPONENTS = {
       loginMode: 'embedded',
       sessionPersistence: 'secure-storage',
       refreshSession: true,
+      socialLogin: {
+        enabledProviders: ['apple', 'google', 'meta', 'github', 'x', 'wechat'],
+        providerLabels: {
+          apple: 'Apple',
+          google: 'Google',
+          meta: 'Meta',
+          github: 'GitHub',
+          x: 'X',
+          wechat: 'WeChat',
+        },
+        redirectUri: 'sdkwork://oauth/callback',
+      },
     },
   },
   appbase: {

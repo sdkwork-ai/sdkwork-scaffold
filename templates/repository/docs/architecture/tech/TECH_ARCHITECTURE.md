@@ -37,6 +37,11 @@ runtime boundary. The standard `Me` capability consumes IAM only
 is configured. All SDK clients share `src/composition/sdkRuntime.ts`; the shell
 boots through `src/appbase/AppErrorBoundary.tsx`.
 
+`social-login` describes the open-platform sign-in contract. IAM owns provider
+discovery, client secrets, and callback exchange; the client owns only the local
+allowlist and rendering. Flutter uses a provider-agnostic port/adapter module
+under `lib/auth/social/`; see `docs/capabilities/SOCIAL_LOGIN.md`.
+
 ### 2.2 Visual Baseline
 
 The generated client surfaces use the tech-blue SDKWork Doctor visual baseline:

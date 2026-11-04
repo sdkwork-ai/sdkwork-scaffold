@@ -53,10 +53,16 @@ Resolution records availability, package name, path, API surface, credential mod
 ## 5. Standard Capabilities
 
 Every generated application receives `specs/capabilities/catalog.json` with the
-standard `foundation`, `surfaces`, `components`, and `me` capabilities.
-`docs/capabilities/ME.md` defines the account/IAM contract; web surfaces also
-receive `src/account/iam-account.ts`, a typed adapter over
-`@sdkwork/iam-app-sdk` for `auth.sessions.current` and `iam.users.current`.
+standard `foundation`, `surfaces`, `components`, `runtime`, and `me` capabilities.
+`docs/capabilities/ME.md` defines the account/IAM contract; web surfaces receive:
+
+- `src/account/iam-account.ts` — password login, refresh, current session/profile,
+  organization/login-context selection, sign-out, token persistence.
+- `src/account/account-store.ts` — cross-tab account snapshot propagation.
+- `src/account/use-iam-account.ts` — runtime hook and sign-in state.
+- `src/composition/sdkRuntime.ts` — one shared token manager for every SDK client.
+- `src/appbase/runtime.ts` and `src/appbase/AppErrorBoundary.tsx` — environment
+  resolution and failure containment through `src/main.tsx`.
 
 ## 6. Visual Baseline
 

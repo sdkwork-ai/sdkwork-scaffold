@@ -226,16 +226,26 @@ the same palette in their generated shells.
 
 ## Standard Capabilities
 
-Every generated application receives `specs/capabilities/catalog.json` and
-`docs/capabilities/ME.md`. The standard `Me` capability is IAM-backed:
+Every generated application receives `specs/capabilities/catalog.json`,
+`docs/capabilities/ME.md`, and `docs/capabilities/RUNTIME.md`.
+
+The standard `Me` capability is IAM-backed:
 
 - `src/account/iam-account.ts` on web surfaces
+- `src/account/account-store.ts` for cross-tab account snapshots
+- `src/account/use-iam-account.ts` for the runtime hook and sign-in form
 - `@sdkwork/iam-app-sdk` only, never raw HTTP or manual auth headers
+- password login: `auth.sessions.create({ grantType: "password" })`
+- refresh: `auth.sessions.refresh({ refreshToken })`
 - session: `auth.sessions.current.retrieve()` / `.delete()`
 - profile: `iam.users.current.retrieve()`
+- organization and login-context selection are first-class outcomes
 
-The scaffold renders the `Unavailable` state until a runtime endpoint and token
-manager are configured. It does not fake a signed-in user.
+The runtime capability installs `src/appbase/runtime.ts` and
+`src/appbase/AppErrorBoundary.tsx` through `src/main.tsx`. Missing API
+configuration is a valid `api-unconfigured` state, not a crash. The scaffold
+renders the `Unavailable` state until a runtime endpoint and token manager are
+configured; it does not fake a signed-in user.
 
 ## Standard Commands
 

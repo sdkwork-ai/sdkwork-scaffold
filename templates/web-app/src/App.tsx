@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 
+import { useIamAccount } from './account/use-iam-account';
 import { integratedComponents } from './composition/components';
 
 const surface: string = '__SURFACE__';
@@ -52,6 +53,49 @@ export default function App() {
   const planned = integratedComponents.length - linked;
   const iam = integratedComponents.find((component) => component.id === 'iam');
   const iamLinked = Boolean(iam?.supported);
+  const account = useIamAccount();
+  const [loginAccount, setLoginAccount] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [loginMessage, setLoginMessage] = useState('');
+  const accountName = account.snapshot.status === 'authenticated'
+    ? (account.snapshot.profile.displayName ?? 'Signed in')
+    : !iamLinked
+      ? 'IAM is not selected'
+      : account.loading
+        ? 'Checking IAM session…'
+        : 'IAM integration ready';
+  const accountBadge = account.snapshot.status === 'authenticated'
+    ? 'Signed in'
+    : iamLinked
+      ? 'Ready'
+      : 'Plan';
+
+  const submitLogin = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const outcome = await account.login({
+      account: loginAccount,
+      password: loginPassword,
+    });
+    if (outcome.status === 'unavailable') {
+      setLoginMessage(outcome.reason);
+      return;
+    }
+    if (outcome.status === 'selection-required') {
+      setLoginMessage('Choose the organization for this session.');
+      return;
+    }
+    setLoginMessage('');
+    setLoginPassword('');
+  };
+
+  const chooseOrganization = async (organizationId: string) => {
+    const outcome = await account.selectOrganization(organizationId);
+    if (outcome.status === 'unavailable') {
+      setLoginMessage(outcome.reason);
+      return;
+    }
+    setLoginMessage('');
+  };
 
   return (
     <div className="scaffold-app" data-surface={surface} data-active-tab={activeTab}>
@@ -214,7 +258,7 @@ export default function App() {
               <p className="scaffold-panel-subtitle">Identity, session, and account security through sdkwork-iam.</p>
             </div>
             <span className="scaffold-badge" data-status={iamLinked ? 'ok' : 'warn'}>
-              {iamLinked ? 'IAM linked' : 'IAM plan'}
+              {accountBadge}
             </span>
           </div>
 
@@ -222,7 +266,7 @@ export default function App() {
             <div className="scaffold-account-identity">
               <span className="scaffold-account-avatar" aria-hidden="true">__APP_INITIALS__</span>
               <div>
-                <strong>{iamLinked ? 'IAM integration ready' : 'IAM is not selected'}</strong>
+                <strong>{accountName}</strong>
                 <p>
                   {iamLinked
                     ? 'Connect the IAM runtime with a base URL and the global token manager to load the signed-in profile.'
@@ -257,6 +301,97 @@ export default function App() {
               </span>
             </div>
           </div>
+
+          {iamLinked ? (
+            account.snapshot.status === 'authenticated' ? (
+              <div className="scaffold-session-actions">
+                <div>
+                  <strong>Signed in through sdkwork-iam</strong>
+                  <span>Session and profile are resolved at runtime.</span>
+                </div>
+                <button type="button" className="scaffold-button" onClick={() => void account.signOut()}>
+                  Sign out
+                </button>
+              </div>
+            ) : (
+              <form className="scaffold-login" onSubmit={(event) => void submitLogin(event)}>
+                <div className="scaffold-login-head">
+                  <div>
+                    <p className="scaffold-eyebrow">IAM sign-in</p>
+                    <h3>Use your application account</h3>
+                  </div>
+                  <span className="scaffold-badge" data-status={account.configured ? 'ok' : 'warn'}>
+                    {account.configured ? 'Runtime configured' : 'Runtime missing'}
+                  </span>
+                </div>
+
+                <div className="scaffold-login-fields">
+                  <label>
+                    <span>Account</span>
+                    <input
+                      type="text"
+                      name="account"
+                      autoComplete="username"
+                      value={loginAccount}
+                      onChange={(event) => setLoginAccount(event.target.value)}
+                      disabled={!account.configured || account.loading}
+                      required
+                    />
+                  </label>
+                  <label>
+                    <span>Password</span>
+                    <input
+                      type="password"
+                      name="password"
+                      autoComplete="current-password"
+                      value={loginPassword}
+                      onChange={(event) => setLoginPassword(event.target.value)}
+                      disabled={!account.configured || account.loading}
+                      required
+                    />
+                  </label>
+                </div>
+
+                <div className="scaffold-login-actions">
+                  <button
+                    type="submit"
+                    className="scaffold-button"
+                    data-tone="primary"
+                    disabled={!account.configured || account.loading}
+                  >
+                    {account.loading ? 'Signing in…' : 'Sign in'}
+                  </button>
+                  <span>
+                    {account.configured
+                      ? 'auth.sessions.create · password grant'
+                      : 'Set VITE_SDKWORK_API_BASE_URL to enable IAM sign-in.'}
+                  </span>
+                </div>
+
+                {loginMessage ? (
+                  <p className="scaffold-login-message" role="alert">{loginMessage}</p>
+                ) : null}
+
+                {account.selection ? (
+                  <div className="scaffold-organization-picker">
+                    <span className="scaffold-stat-label">Choose organization</span>
+                    <div>
+                      {account.selection.organizations.map((organization) => (
+                        <button
+                          type="button"
+                          className="scaffold-button"
+                          key={organization.organizationId}
+                          onClick={() => void chooseOrganization(organization.organizationId)}
+                        >
+                          {organization.displayName ?? organization.organizationId}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+              </form>
+            )
+          ) : null}
 
           <div className="scaffold-account-links">
             <div><strong>Profile</strong><span>Display name, email, phone</span><code>iam.users.current</code></div>

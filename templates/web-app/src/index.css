@@ -259,6 +259,11 @@ code {
   color: #fff;
 }
 
+.scaffold-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .scaffold-surface-chip {
   padding: 9px 12px;
   border-radius: 999px;
@@ -578,6 +583,39 @@ code {
   font-size: 11px;
 }
 
+.scaffold-fatal {
+  max-width: 720px;
+  margin: 12vh auto 0;
+  padding: 28px;
+  border-radius: var(--scaffold-radius);
+  background: var(--scaffold-surface);
+}
+
+.scaffold-fatal h1 {
+  margin: 0 0 10px;
+  font-size: 26px;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+}
+
+.scaffold-fatal p {
+  margin: 0 0 14px;
+  color: var(--scaffold-muted);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.scaffold-fatal pre {
+  overflow: auto;
+  margin: 0 0 18px;
+  padding: 12px;
+  border-radius: var(--scaffold-radius-sm);
+  background: var(--scaffold-error-bg);
+  color: var(--scaffold-error);
+  font-size: 12px;
+  white-space: pre-wrap;
+}
+
 .scaffold-mobile-appbar,
 .scaffold-bottom-tabs {
   display: none;
@@ -663,6 +701,16 @@ code {
 .scaffold-app[data-surface="h5"] .scaffold-callout {
   grid-template-columns: 1fr;
   gap: 12px;
+}
+
+.scaffold-app[data-surface="h5"] .scaffold-login-fields {
+  grid-template-columns: 1fr;
+}
+
+.scaffold-app[data-surface="h5"] .scaffold-login-actions,
+.scaffold-app[data-surface="h5"] .scaffold-session-actions {
+  align-items: flex-start;
+  flex-direction: column;
 }
 
 .scaffold-app[data-surface="h5"] .scaffold-bottom-tabs {
@@ -806,6 +854,112 @@ code {
   font-size: 11px;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.scaffold-login,
+.scaffold-session-actions {
+  margin-top: 12px;
+  padding: 16px;
+  border-radius: var(--scaffold-radius-sm);
+  background: var(--scaffold-surface-alt);
+}
+
+.scaffold-login-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.scaffold-login-head h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.scaffold-login-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.scaffold-login-fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  color: var(--scaffold-muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.scaffold-login-fields input {
+  width: 100%;
+  min-height: 38px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: var(--scaffold-radius-sm);
+  background: var(--scaffold-surface);
+  color: var(--scaffold-text);
+  font: inherit;
+  font-size: 13px;
+}
+
+.scaffold-login-fields input:disabled {
+  opacity: 0.6;
+}
+
+.scaffold-login-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.scaffold-login-actions span {
+  color: var(--scaffold-muted);
+  font-size: 11px;
+}
+
+.scaffold-login-message {
+  margin: 10px 0 0;
+  color: var(--scaffold-error);
+  font-size: 12px;
+}
+
+.scaffold-organization-picker {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 0;
+  background: transparent;
+}
+
+.scaffold-organization-picker > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.scaffold-session-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.scaffold-session-actions strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.scaffold-session-actions span {
+  display: block;
+  margin-top: 2px;
+  color: var(--scaffold-muted);
+  font-size: 11px;
 }
 
 .scaffold-account-links {

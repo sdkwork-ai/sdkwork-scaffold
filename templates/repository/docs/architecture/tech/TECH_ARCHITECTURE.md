@@ -30,9 +30,12 @@ The app shells are thin composition roots. Business behavior, service ports, gen
 ### 2.1 Standard Capabilities
 
 `specs/capabilities/catalog.json` is the machine catalog; `docs/capabilities/ME.md`
-is the account/IAM contract. The standard `Me` capability consumes IAM only
-(`auth.sessions.current`, `iam.users.current`), owns no tokens, and renders
-`Unavailable` until a runtime is configured.
+is the account/IAM contract and `docs/capabilities/RUNTIME.md` is the browser
+runtime boundary. The standard `Me` capability consumes IAM only
+(`auth.sessions.create`, `auth.sessions.refresh`, `auth.sessions.current`,
+`iam.users.current`), owns no tokens, and renders `Unavailable` until a runtime
+is configured. All SDK clients share `src/composition/sdkRuntime.ts`; the shell
+boots through `src/appbase/AppErrorBoundary.tsx`.
 
 ### 2.2 Visual Baseline
 

@@ -17,3 +17,4 @@ Thumbs.db
 .sdkwork/cache/
 .sdkwork/secrets/
 .sdkwork/manual-backups/
+build/
